@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#0f1216" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f4f6f9" media="(prefers-color-scheme: light)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="description" content="Strength exercise guide for Half Marathon Plan v02">
+<title>Strength Sessions — Half Marathon Plan v02</title>
+<style>
+:root{
+  color-scheme: dark light;
+  --bg:#0f1216;
+  --bg2:#141a21;
+  --card:#171d25;
+  --card2:#1d242e;
+  --fg:#e9eef4;
+  --muted:#98a6b5;
+  --line:#28313d;
+  --accent:#4cc2ff;
+  --accent-ink:#04202e;
+  --good:#7bd88f;
+  --warn:#ffb15c;
+  --bad:#ff7a7a;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+  --radius:16px;
+  --maxw:820px;
+}
+@media (prefers-color-scheme: light){
+  :root{
+    --bg:#f4f6f9; --bg2:#ffffff; --card:#ffffff; --card2:#f1f4f8;
+    --fg:#16202b; --muted:#5d6c7c; --line:#dde4ec;
+    --accent:#0a6fb0; --accent-ink:#ffffff;
+    --good:#1f7a45; --warn:#a8600d; --bad:#b4352f;
+    --shadow:0 8px 24px rgba(20,40,60,.10);
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg);
+  color:var(--fg);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size:16px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  overscroll-behavior-y:none;
+}
+button,select,a{font-family:inherit}
+button{cursor:pointer;border:0;background:none;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
+
+.app{
+  display:flex; flex-direction:column;
+  height:100vh; height:100dvh;
+}
+
+/* ---------- HEADER ---------- */
+header.top{
+  flex:0 0 auto;
+  background:linear-gradient(180deg,var(--bg2),var(--bg));
+  border-bottom:1px solid var(--line);
+  padding:calc(10px + env(safe-area-inset-top)) calc(14px + env(safe-area-inset-right)) 10px calc(14px + env(safe-area-inset-left));
+}
+.top-inner{max-width:var(--maxw);margin:0 auto}
+.brand{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.brand h1{font-size:1.02rem;margin:0;letter-spacing:.2px}
+.brand .sub{font-size:.76rem;color:var(--muted);text-transform:uppercase;letter-spacing:.09em}
+
+.tabs{
+  display:flex;gap:6px;background:var(--card2);border:1px solid var(--line);
+  padding:4px;border-radius:14px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  flex:1 1 auto;white-space:nowrap;padding:9px 12px;border-radius:11px;
+  font-size:.86rem;font-weight:600;color:var(--muted);text-align:center;
+  transition:background .16s,color .16s;
+}
+.tab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);box-shadow:var(--shadow)}
+.tab .tab-sub{display:block;font-size:.68rem;font-weight:500;opacity:.8}
+
+.jump-row{display:flex;gap:8px;align-items:center;margin-top:10px}
+.jump-row label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;flex:0 0 auto}
+select#jump{
+  flex:1 1 auto;min-width:0;appearance:none;-webkit-appearance:none;
+  background:var(--card2) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2398a6b5' stroke-width='3'><path d='M5 9l7 7 7-7'/></svg>") no-repeat right 12px center;
+  border:1px solid var(--line);color:var(--fg);border-radius:11px;
+  padding:10px 34px 10px 12px;font-size:.9rem;font-weight:500;
+}
+.session-note{
+  margin:10px 0 0;padding:9px 12px;border-radius:11px;font-size:.82rem;
+  background:color-mix(in srgb,var(--warn) 14%,transparent);
+  border:1px solid color-mix(in srgb,var(--warn) 35%,transparent);
+  color:var(--fg);
+}
+.session-note.hide{display:none}
+
+/* ---------- MAIN ---------- */
+main{
+  flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:14px calc(14px + env(safe-area-inset-right)) 26px calc(14px + env(safe-area-inset-left));
+}
+.card{
+  max-width:var(--maxw);margin:0 auto;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);overflow:hidden;
+}
+.card-head{padding:16px 16px 14px;border-bottom:1px solid var(--line);background:var(--card2)}
+.eyebrow{font-size:.7rem;text-transform:uppercase;letter-spacing:.11em;color:var(--accent);font-weight:700}
+.card-head h2{margin:6px 0 12px;font-size:clamp(1.25rem,4.6vw,1.6rem);line-height:1.2;letter-spacing:-.2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:6px 10px;min-width:64px;
+}
+.chip .k{display:block;font-size:.63rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted)}
+.chip .v{display:block;font-size:.95rem;font-weight:700}
+.chip.hero{border-color:color-mix(in srgb,var(--accent) 45%,transparent);background:color-mix(in srgb,var(--accent) 12%,transparent)}
+
+.card-body{padding:4px 16px 18px}
+section.blk{padding:14px 0;border-bottom:1px solid var(--line)}
+section.blk:last-child{border-bottom:0;padding-bottom:4px}
+h3.blk-t{
+  margin:0 0 8px;font-size:.74rem;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--muted);font-weight:700;display:flex;align-items:center;gap:7px;
+}
+h3.blk-t::before{content:"";width:3px;height:13px;background:var(--accent);border-radius:2px}
+h3.blk-t.warn::before{background:var(--bad)}
+h3.blk-t.good::before{background:var(--good)}
+.blk p{margin:0 0 8px}
+.blk p:last-child{margin-bottom:0}
+
+ol.steps{margin:0;padding:0;list-style:none;counter-reset:s}
+ol.steps li{
+  counter-increment:s;position:relative;padding:0 0 12px 38px;
+}
+ol.steps li:last-child{padding-bottom:0}
+ol.steps li::before{
+  content:counter(s);position:absolute;left:0;top:1px;
+  width:26px;height:26px;border-radius:50%;
+  background:color-mix(in srgb,var(--accent) 16%,transparent);
+  color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.78rem;font-weight:800;
+}
+.sub-t{margin:14px 0 8px;font-size:.9rem;font-weight:700}
+.sub-t:first-child{margin-top:0}
+
+ul.dots{margin:0;padding-left:20px}
+ul.dots li{margin-bottom:7px}
+ul.dots li:last-child{margin-bottom:0}
+ul.dots.bad li::marker{color:var(--bad)}
+ul.dots.good li::marker{color:var(--good)}
+
+.callout{
+  background:var(--card2);border:1px solid var(--line);border-left:3px solid var(--accent);
+  border-radius:0 11px 11px 0;padding:11px 13px;margin:0 0 10px;
+}
+.callout:last-child{margin-bottom:0}
+.callout.rule{border-left-color:var(--warn)}
+.callout.feel{border-left-color:var(--good)}
+.callout h4{margin:0 0 4px;font-size:.85rem;font-weight:800}
+.callout p{margin:0;font-size:.94rem}
+strong{font-weight:700}
+
+/* ---------- TIMER ---------- */
+.timer{
+  margin:14px 0 0;border:1px solid var(--line);border-radius:14px;
+  background:var(--card2);overflow:hidden;
+}
+.timer.timed{border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
+.t-head{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:11px 13px;width:100%;
+}
+.t-head .lbl{display:flex;align-items:center;gap:8px;font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.09em}
+.badge{
+  font-size:.62rem;letter-spacing:.06em;padding:3px 7px;border-radius:999px;
+  background:color-mix(in srgb,var(--accent) 18%,transparent);
+  color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 38%,transparent);
+}
+.t-head .caret{color:var(--muted);font-size:.78rem;font-weight:700}
+.t-body{padding:0 13px 14px;display:block}
+.timer.collapsed .t-body{display:none}
+.t-phase{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;font-weight:700;min-height:1.2em}
+.t-display{
+  font-variant-numeric:tabular-nums;font-feature-settings:"tnum";
+  font-size:clamp(2.6rem,13vw,3.6rem);font-weight:800;line-height:1.05;letter-spacing:-1.5px;margin:2px 0 2px;
+}
+.t-display.rest{color:var(--warn)}
+.t-display.done{color:var(--good)}
+.t-round{font-size:.8rem;color:var(--muted);min-height:1.2em}
+.t-bar{height:6px;background:var(--card);border-radius:99px;overflow:hidden;margin:9px 0 12px;border:1px solid var(--line)}
+.t-bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .18s linear}
+.t-bar i.rest{background:var(--warn)}
+.t-presets{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+.preset{
+  font-size:.78rem;font-weight:600;padding:7px 11px;border-radius:999px;
+  border:1px solid var(--line);background:var(--card);color:var(--muted);
+}
+.preset[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.t-controls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.t-controls button{
+  padding:12px 8px;border-radius:11px;font-weight:800;font-size:.9rem;
+  border:1px solid var(--line);background:var(--card);min-height:46px;
+}
+.t-controls button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.t-controls button:disabled{opacity:.42;cursor:default}
+
+/* ---------- FOOTER ---------- */
+footer.bottom{
+  flex:0 0 auto;
+  background:color-mix(in srgb,var(--bg2) 92%,transparent);
+  backdrop-filter:saturate(160%) blur(12px);
+  -webkit-backdrop-filter:saturate(160%) blur(12px);
+  border-top:1px solid var(--line);
+  padding:9px calc(12px + env(safe-area-inset-right)) calc(9px + env(safe-area-inset-bottom)) calc(12px + env(safe-area-inset-left));
+}
+.bottom-inner{max-width:var(--maxw);margin:0 auto;display:flex;flex-direction:column;gap:8px}
+.video-row{display:flex;gap:8px}
+.btn-video{
+  flex:1 1 auto;display:flex;align-items:center;justify-content:center;gap:8px;
+  text-decoration:none;color:var(--fg);
+  background:var(--card2);border:1px solid var(--line);
+  border-radius:12px;padding:11px;font-size:.88rem;font-weight:700;min-height:46px;
+}
+.btn-video:active{background:var(--card)}
+.btn-video .play{color:var(--bad);font-size:1.05rem;line-height:1}
+.btn-alt{
+  flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+  text-decoration:none;color:var(--muted);background:var(--card2);
+  border:1px solid var(--line);border-radius:12px;padding:11px 13px;
+  font-size:.78rem;font-weight:700;min-height:46px;
+}
+.nav-row{display:flex;align-items:center;gap:8px}
+.nav-btn{
+  flex:1 1 0;min-height:52px;border-radius:13px;font-size:.95rem;font-weight:800;
+  background:var(--card2);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.nav-btn.next{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.nav-btn:disabled{opacity:.35;cursor:default}
+.counter{flex:0 0 auto;text-align:center;min-width:96px}
+.counter .n{font-size:.86rem;font-weight:800;font-variant-numeric:tabular-nums}
+.counter .pbar{height:4px;border-radius:99px;background:var(--card2);border:1px solid var(--line);overflow:hidden;margin-top:5px}
+.counter .pbar i{display:block;height:100%;background:var(--accent);width:0;transition:width .2s ease}
+
+@media (min-width:700px){
+  .bottom-inner{flex-direction:row-reverse;align-items:center;gap:12px}
+  .video-row{flex:0 0 auto;max-width:320px}
+  .nav-row{flex:1 1 auto}
+}
+.kbd-hint{display:none;font-size:.68rem;color:var(--muted);text-align:center;margin-top:2px}
+@media (hover:hover) and (pointer:fine){.kbd-hint{display:block}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="top">
+    <div class="top-inner">
+      <div class="brand">
+        <h1>Strength Sessions</h1>
+        <span class="sub">Half Marathon Plan v02</span>
+      </div>
+      <div class="tabs" id="tabs" role="tablist" aria-label="Training session"></div>
+      <div class="jump-row">
+        <label for="jump">Jump to</label>
+        <select id="jump" aria-label="Jump to exercise"></select>
+      </div>
+      <p class="session-note hide" id="sessionNote"></p>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <article class="card" id="card" aria-live="polite"></article>
+  </main>
+
+  <footer class="bottom">
+    <div class="bottom-inner">
+      <div class="video-row">
+        <a class="btn-video" id="videoBtn" href="#" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">
+          <span class="play">&#9654;</span><span>Watch Video Demo</span>
+        </a>
+        <a class="btn-alt" id="googleBtn" href="#" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer" title="Search Google instead">Google</a>
+      </div>
+      <div class="nav-row">
+        <button class="nav-btn" id="prevBtn" type="button">&#8249;&nbsp; Prev</button>
+        <div class="counter">
+          <div class="n" id="counter">1 of 5</div>
+          <div class="pbar"><i id="pfill"></i></div>
+        </div>
+        <button class="nav-btn next" id="nextBtn" type="button">Next &nbsp;&#8250;</button>
+      </div>
+      <div class="kbd-hint">&#8592; / &#8594; to move &middot; Space to start or pause the timer</div>
+    </div>
+  </footer>
+</div>
+
+<script>
+"use strict";
+
+/* =========================================================
+   DATA — exercises stored once, sessions reference them by id
+   ========================================================= */
+
+const EX = {
+
+/* ------------------------ MONDAY, SESSION A ------------------------ */
+
+"standing-calf": {
+  name: "Standing Calf Raise, Straight Knee",
+  video: "standing calf raise straight knee eccentric form",
+  chips: [ {k:"Sets",v:"4",hero:true}, {k:"Reps",v:"8–10",hero:true}, {k:"Tempo",v:"3 s lower"} ],
+  setup: "Stand on the edge of a step or stair with the balls of your feet on the edge and your heels hanging off. Hold a wall or railing for balance. If you have a dumbbell, hold it in one hand. Start with bodyweight until the movement feels natural.",
+  stepGroups: [{ title:"The movement", steps:[
+    "Start with your heels dropped below the step. You should feel a gentle stretch in your calves.",
+    "Push up onto your toes as high as you can. Pause for one second at the top.",
+    "Lower slowly, counting \"one-thousand, two-thousand, three-thousand\" on the way down. This slow lowering is the whole point of the exercise. Don't rush it.",
+    "Let your heels drop just below the step. That's one rep."
+  ]}],
+  feel: "The big calf muscle (gastrocnemius) doing the work. Both calves should be burning evenly by rep 7 or 8. You should feel the stretch at the bottom and a hard squeeze at the top.",
+  cues: [ {t:"Keep your knees straight", b:"Throughout. Not locked rigid, but straight. If your knees bend, you shift the load off the gastrocnemius and onto the soleus (that's the next exercise)."} ],
+  mistakes: [{ items:[
+    "Bouncing at the bottom instead of pausing. This uses elastic recoil and bypasses the muscle.",
+    "Rushing the lowering phase. If you aren't counting three seconds, you're going too fast.",
+    "Leaning forward. Stay upright with your weight directly over the balls of your feet.",
+    "Going too heavy too soon. You want to complete 8 reps with good form and a 3-second lower. If you can't, drop the weight."
+  ]}],
+  timer: null
+},
+
+"seated-calf": {
+  name: "Seated Calf Raise, Bent Knee",
+  video: "seated calf raise bent knee soleus home form",
+  chips: [ {k:"Sets",v:"3",hero:true}, {k:"Reps",v:"12–15",hero:true}, {k:"Tempo",v:"2 s lower"} ],
+  setup: "Sit on a chair or bench with your feet flat on the floor, knees bent at about 90 degrees. Place a weight across your knees (a dumbbell resting on a folded towel works). Put the balls of your feet on a thick book or low platform so your heels can drop below the surface.",
+  stepGroups: [{ title:"The movement", steps:[
+    "Press through the balls of your feet and lift your heels as high as you can.",
+    "Pause briefly at the top.",
+    "Lower slowly (2 seconds) back to the start."
+  ]}],
+  feel: "A burn deeper and lower in the calf than the standing version. This is the soleus, the muscle underneath the gastrocnemius. It sits closer to the Achilles tendon. You won't feel it as dramatically as the standing raise but it should be fatiguing by rep 12.",
+  cues: [ {t:"Why it matters", b:"The soleus is the single hardest-working muscle during running. It produces more force than any other muscle at every stride. Training it bent-knee isolates it specifically because bending the knee slackens the gastrocnemius and forces the soleus to do the work alone."} ],
+  mistakes: [{ items:[
+    "Skipping this because the standing version \"already did calves.\" They target different muscles.",
+    "No platform under the feet, so the heel never drops below the toes. You lose the bottom-range loading.",
+    "Rocking the torso to generate momentum."
+  ]}],
+  timer: null
+},
+
+"split-squat": {
+  name: "Rear-Foot Elevated Split Squat",
+  alias: "Bulgarian Split Squat",
+  video: "bulgarian split squat proper form tutorial",
+  chips: [ {k:"Sets",v:"3",hero:true}, {k:"Reps",v:"8 / leg",hero:true} ],
+  setup: "Stand about 60 to 70 cm in front of a couch, chair, or bench. Reach one foot back and rest the top of that foot on the surface behind you. Your front foot is flat on the ground, pointing straight ahead. Most of your weight should be on the front leg.",
+  stepGroups: [{ title:"The movement", steps:[
+    "Bend your front knee and lower your body straight down. Think of dropping your back knee toward the floor, not pushing your front knee forward.",
+    "Go down until your front thigh is roughly parallel to the ground, or as deep as you can with good balance.",
+    "Push back up through your front heel."
+  ]}],
+  feel: "Your front-leg quad (front of thigh) and glute (backside) doing most of the work. Some stretch in the hip flexor of the back leg. This is a single-leg strength exercise, so expect one side to feel harder than the other.",
+  cues: [ {t:"Keep your torso upright", b:"A slight forward lean is fine, but don't fold at the waist."} ],
+  mistakes: [{ items:[
+    "Standing too close to the bench. Your front knee ends up way past your toes and the knee joint takes excessive load. Step further forward.",
+    "Standing too far from the bench. You end up in an awkward lunge and can't get depth. Adjust until the bottom position feels stable.",
+    "Letting the front knee collapse inward. Consciously push it outward so it tracks over your second or third toe.",
+    "Gripping the back foot. The back leg is just a kickstand for balance. If you're pushing off the back foot, you're cheating the front leg.",
+    "Adding weight before the balance is sorted. Get 3 x 8 confidently with bodyweight first."
+  ]}],
+  timer: null
+},
+
+"sl-rdl": {
+  name: "Single-Leg Romanian Deadlift",
+  video: "single leg romanian deadlift form tutorial",
+  chips: [ {k:"Sets",v:"3",hero:true}, {k:"Reps",v:"8 / leg",hero:true} ],
+  setup: "Stand on one leg with a slight bend in that knee. Hold a dumbbell or kettlebell in the opposite hand (left leg standing, right hand holds the weight). If you have nothing, do it with bodyweight. Stand next to a wall if balance is a problem at first.",
+  stepGroups: [{ title:"The movement", steps:[
+    "Hinge forward at the hip, letting your free leg drift straight back behind you as a counterbalance. Imagine your body is a seesaw pivoting at the hip.",
+    "Keep lowering the weight toward the ground until you feel a strong stretch in the hamstring of the standing leg. For most people this is when the torso is roughly parallel to the floor.",
+    "Squeeze your glute and hamstring to stand back up."
+  ]}],
+  feel: "A deep stretch and then a contraction in the back of your standing-leg thigh (hamstring) and your glute. Your lower back should feel like it's working to stay flat, but it should not hurt.",
+  cues: [ {t:"The standing knee stays slightly bent", b:"The entire time. Do not lock it out, and do not let it bend further as you hinge."} ],
+  mistakes: [{ items:[
+    "Rounding the lower back. This is the most important one. Your back should stay flat from your head to your tailbone throughout the entire movement. If your back rounds, you've gone too deep. Come back up 5 cm.",
+    "Rotating the hips. Your hips should stay square to the ground, like you have headlights on the front of both hip bones and they're both pointing at the floor. The free leg going out to the side is a sign of hip rotation.",
+    "Bending the standing knee more as you hinge. The knee angle stays fixed.",
+    "Looking up. Keep your neck neutral, eyes on a spot about 2 metres ahead of you on the floor.",
+    "Wobbling excessively and treating it as a balance exercise. If you can't do it without grabbing something, stand next to a wall and lightly touch it. The goal is hamstring and glute loading, not balance practice."
+  ]}],
+  timer: null
+},
+
+"copenhagen": {
+  name: "Copenhagen Plank",
+  video: "copenhagen plank adductor exercise form",
+  chips: [ {k:"Sets",v:"3",hero:true}, {k:"Hold",v:"20–30 s",hero:true}, {k:"Per",v:"Side"} ],
+  setup: "Lie on your side next to a bench, couch, or sturdy chair. Place the inside of your top leg's knee or lower shin on the surface. Your bottom leg hangs free underneath. Prop yourself up on your bottom elbow, directly under your shoulder.",
+  stepGroups: [{ title:"The movement", steps:[
+    "Lift your hips off the ground by squeezing the inner thigh of your top leg into the bench.",
+    "Your body should form a straight line from your top-leg knee to your shoulder.",
+    "Hold this position. Breathe normally. Don't hold your breath.",
+    "Lower down. Switch sides."
+  ]}],
+  feel: "Your inner thigh (adductor) of the top leg working hard. This is the muscle group that refers pain to the groin and is a common running injury site.",
+  cues: [ {t:"Regression if it's too hard", b:"Instead of placing the bench contact point at your knee, use your ankle or mid-shin (this shortens the lever and makes it easier). Or start with your bottom knee on the ground as well, so you're only lifting a short segment of your body.", kind:"rule"} ],
+  mistakes: [{ items:[
+    "Letting the hips sag or pike upward. Straight line from knee to shoulder.",
+    "Holding the bench contact at the ankle from day one. Start at the knee (easier) and progress to the ankle (harder) over weeks.",
+    "Holding your breath. Breathe.",
+    "Placing the supporting elbow too far forward or back. It goes directly under the shoulder joint."
+  ]}],
+  timer: {
+    presets: [
+      {label:"20 s hold", phases:[{label:"Hold",s:20}]},
+      {label:"25 s hold", phases:[{label:"Hold",s:25}]},
+      {label:"30 s hold", phases:[{label:"Hold",s:30}], default:true},
+      {label:"30 s × both sides", phases:[{label:"Hold — side 1",s:30},{label:"Switch sides",s:15,rest:true},{label:"Hold — side 2",s:30}]}
+    ]
+  }
+},
+
+/* ------------------------ WEDNESDAY, SESSION B ------------------------ */
+
+"pogo": {
+  name: "Pogo Hops",
+  video: "pogo hops running plyometric drill technique",
+  chips: [ {k:"Sets",v:"3",hero:true}, {k:"Contacts",v:"20",hero:true}, {k:"Count",v:"Each landing = 1"} ],
+  setup: "Stand on a firm, flat surface in your running shoes. Feet hip-width apart.",
+  stepGroups: [{ title:"The movement", steps:[
+    "Bounce on the balls of your feet with stiff ankles, as if you're skipping rope without the rope.",
+    "Keep your knees almost straight. The bounce comes from your ankles and feet, not from bending your knees.",
+    "Think \"spring,\" not \"jump.\" Spend as little time on the ground as possible.",
+    "Arms can be relaxed at your sides or lightly swinging."
+  ]}],
+  feel: "A quick, elastic loading through your Achilles and calf. This should feel bouncy and light, not heavy or effortful. If it feels like hard work, you're jumping too high.",
+  cues: [],
+  mistakes: [{ items:[
+    "Bending the knees deeply and turning it into squat jumps. Knees stay nearly straight.",
+    "Jumping too high. Aim for 2 to 5 cm off the ground.",
+    "Landing on the heels. Stay on the balls of your feet throughout.",
+    "Doing these when your Achilles is sore. If the Monday calf soreness is still present, skip pogo hops entirely."
+  ]}],
+  timer: null
+},
+
+"a-skips": {
+  name: "A-Skips",
+  video: "A skip running drill technique tutorial",
+  chips: [ {k:"Sets",v:"3",hero:true}, {k:"Distance",v:"20 m",hero:true} ],
+  setup: "Find a flat stretch of ground, about 20 metres long. A hallway, driveway, or footpath works.",
+  stepGroups: [{ title:"The movement", steps:[
+    "Skip forward, driving one knee up to roughly hip height with each skip.",
+    "The rhythm is \"skip-drive, skip-drive.\" There's a small hop on the support leg as the other knee drives up.",
+    "Land on the ball of your foot each time.",
+    "Opposite arm swings forward with each knee drive, just like running."
+  ]}],
+  feel: "A rhythmic, bouncy, exaggerated running motion. Your hip flexors (front of the hip) do the knee drive; your calves and feet handle the bounce.",
+  cues: [],
+  mistakes: [{ items:[
+    "Turning it into high knees without the skip. The skip (small hop) is the reactive component.",
+    "Leaning back. Stay tall, slight forward lean.",
+    "Going too fast. This is a drill, not a sprint. Controlled rhythm.",
+    "Stiff arms. Let them swing naturally."
+  ]}],
+  timer: null
+},
+
+"band-walk": {
+  name: "Banded Lateral Walk",
+  video: "banded lateral walk glute medius exercise form",
+  chips: [ {k:"Sets",v:"2",hero:true}, {k:"Steps",v:"15",hero:true}, {k:"Per",v:"Direction"} ],
+  setup: "Place a resistance band (loop style) around both legs just above the knees. If you don't have a band, you can do this without one initially but the exercise is much less effective. Stand with feet hip-width apart, slight bend in knees and hips (a quarter-squat position).",
+  stepGroups: [{ title:"The movement", steps:[
+    "Step sideways with one foot, pushing against the band.",
+    "Follow with the other foot, returning to hip-width apart. Don't let your feet clap together.",
+    "Stay low in the quarter-squat position throughout. Don't bob up and down.",
+    "Take 15 steps one direction, then 15 back."
+  ]}],
+  feel: "A burn on the outside of both hips (gluteus medius). The stepping leg works to push out; the stance leg works to resist being pulled in.",
+  cues: [ {t:"Why it matters", b:"Weak hip abductors are associated with the knee collapsing inward during running (the same pattern that causes ITB friction syndrome and patellofemoral pain). This is the simplest targeted exercise for them."} ],
+  mistakes: [{ items:[
+    "Standing too upright. Stay in a slight squat. If you're standing tall, the band is too easy and the glute med isn't loaded.",
+    "Dragging the trailing foot. Lift and step, don't shuffle.",
+    "Letting the band pull your knees together. The whole point is resisting that pull.",
+    "Using a band that's too light. You should feel the outside of your hip working by step 8 to 10."
+  ]}],
+  timer: null
+},
+
+"short-foot": {
+  name: "Short-Foot / Toe Splay",
+  video: "short foot exercise toe splay intrinsic foot muscles",
+  chips: [ {k:"Sets",v:"2",hero:true}, {k:"Hold",v:"30 s",hero:true}, {k:"Per",v:"Foot"} ],
+  setup: "Sit in a chair with your bare foot flat on the floor.",
+  stepGroups: [
+    { title:"The movement (short foot)", steps:[
+      "Without curling your toes, try to shorten your foot by drawing the ball of your foot toward your heel. Imagine you're trying to raise the arch of your foot using only the muscles in the sole.",
+      "Your toes stay flat on the ground. They don't grip or curl.",
+      "Hold for 30 seconds."
+    ]},
+    { title:"The movement (toe splay)", steps:[
+      "Spread all five toes apart as wide as you can, like a fan opening.",
+      "Hold for 5 seconds, relax, repeat for 30 seconds."
+    ]}
+  ],
+  feel: "The small muscles in the sole of your foot (intrinsics) working. This is subtle. It won't feel like a big burn. Most people can barely do it at first.",
+  cues: [ {t:"Why it matters", b:"Stronger intrinsic foot muscles improve toe alignment and reduce shear against the shoe, which is directly relevant if you get recurring medial big-toe (hallux) blisters. It's a low-cost, low-risk intervention."} ],
+  mistakes: [{ items:[
+    "Curling the toes under. The toes stay flat and long. Only the arch lifts.",
+    "Using the tibialis anterior (the muscle on the front of your shin) to do the work. If you see your ankle dorsiflexing (foot pulling up), you're using the wrong muscle.",
+    "Dismissing it because it feels like nothing. It takes 2 to 3 weeks before the motor control clicks in."
+  ]}],
+  timer: {
+    presets: [
+      {label:"Short foot 30 s", phases:[{label:"Short foot hold",s:30}], default:true},
+      {label:"Toe splay 5 s × 3", phases:[
+        {label:"Splay",s:5},{label:"Relax",s:5,rest:true},
+        {label:"Splay",s:5},{label:"Relax",s:5,rest:true},
+        {label:"Splay",s:5},{label:"Relax",s:5,rest:true}]},
+      {label:"Both feet 30 s + 30 s", phases:[
+        {label:"Foot 1",s:30},{label:"Swap feet",s:10,rest:true},{label:"Foot 2",s:30}]}
+    ]
+  }
+},
+
+"pallof": {
+  name: "Pallof Press",
+  video: "pallof press anti rotation core exercise form",
+  chips: [ {k:"Sets",v:"2",hero:true}, {k:"Reps",v:"10 / side",hero:true}, {k:"Hold",v:"2 s"} ],
+  setup: "Attach a resistance band to a fixed point (door handle, railing post, power rack) at roughly chest height. Stand side-on to the anchor point, holding the band with both hands at your chest. Step far enough away that there's meaningful tension in the band trying to rotate you toward the anchor.",
+  stepGroups: [{ title:"The movement", steps:[
+    "Stand with feet shoulder-width apart, slight bend in knees.",
+    "Press the band straight out in front of your chest with both hands, extending your arms fully.",
+    "Hold for 2 seconds. The band is trying to twist you toward the anchor. Resist that rotation. Your torso stays perfectly square, facing straight ahead.",
+    "Bring your hands back to your chest. That's one rep."
+  ]}],
+  feel: "Your deep core muscles (obliques, transverse abdominis) fighting to stop you rotating. This is not an arm exercise. If your arms are burning, you're using too much resistance. You should feel your trunk working to stay still.",
+  cues: [],
+  altTitle: "Alternative if you don't have a band or anchor point — Dead Bug",
+  altSteps: [
+    "Lie on your back, arms reaching straight up toward the ceiling, knees bent at 90 degrees with shins parallel to the floor.",
+    "Press your lower back flat into the ground. There should be no gap between your lower back and the floor. This is the position you hold for the entire exercise.",
+    "Slowly extend your right arm overhead and your left leg out straight, lowering both toward the floor without touching it.",
+    "Return to start. Repeat with the opposite arm and leg. That's one rep per side.",
+    "If your lower back arches off the floor at any point, you've gone too far. Reduce the range."
+  ],
+  mistakes: [
+    { t:"Pallof", items:[
+      "Rotating toward the band. That means the resistance is too high. Step closer to the anchor.",
+      "Flaring the elbows. Press straight forward, not out to the sides.",
+      "Rushing. The hold at full extension is where the anti-rotation demand is highest."
+    ]},
+    { t:"Dead Bug", items:[
+      "Letting the lower back arch off the floor. This is the single most important thing. If the back lifts, the core has disengaged.",
+      "Moving too fast. Slow and controlled.",
+      "Holding your breath. Exhale as you extend, inhale as you return."
+    ]}
+  ],
+  timer: null
+},
+
+/* ------------------------ MODIFIED MONDAY ------------------------ */
+
+"iso-calf": {
+  name: "Isometric Calf Hold",
+  alias: "Replaces standing and seated calf raises",
+  video: "isometric calf hold achilles tendinopathy exercise",
+  chips: [ {k:"Holds",v:"5",hero:true}, {k:"Time",v:"45 s",hero:true}, {k:"Rest",v:"60 s"}, {k:"Load",v:"Moderate"}, {k:"Legs",v:"Both"} ],
+  setup: "Same position as the standing calf raise (balls of feet on a step, heels off the edge). Hold a wall for balance.",
+  stepGroups: [{ title:"The movement", steps:[
+    "Rise up onto your toes to roughly halfway, not the absolute top of your range. Find a position that feels strong and produces no more than 3/10 pain.",
+    "Hold that position. Don't move. Breathe normally.",
+    "After 45 seconds, lower slowly and rest for 60 seconds."
+  ]}],
+  feel: "A deep, sustained burn in both calves. The tendon is loaded but not through a stretch-shorten cycle, which is what irritates a reactive Achilles.",
+  cues: [
+    {t:"Why isometric specifically", b:"Isometric loading at moderate intensity has an analgesic (pain-reducing) effect on irritable tendons without the mechanical provocation of repeated lengthening. It's the standard first-line loading approach in tendinopathy management before progressing back to isotonic (moving) exercises."},
+    {t:"Go / no-go rule", b:"Pain during the hold must be 3/10 or less, and must not be worse 24 hours later. If it is, reduce the rise height or drop the external load.", kind:"rule"}
+  ],
+  mistakes: [{ items:[
+    "Going to full height. Stay at mid-range where the tendon is least compressed.",
+    "Holding your breath and tensing everything. Breathe. Only the calves should be working.",
+    "Skipping this and doing nothing. Doing nothing is worse than the isometric. The tendon needs load to remodel; it just needs the right type."
+  ]}],
+  timer: {
+    presets: [
+      {label:"Full protocol — 45 s × 5", phases: buildIntervals(5,45,60,"Hold","Rest"), default:true},
+      {label:"Single 45 s hold", phases:[{label:"Hold",s:45}]},
+      {label:"45 s hold + 60 s rest", phases:[{label:"Hold",s:45},{label:"Rest",s:60,rest:true}]}
+    ]
+  }
+}
+
+};
+
+function buildIntervals(rounds, work, rest, wLabel, rLabel){
+  const out = [];
+  for (let i=1;i<=rounds;i++){
+    out.push({label:`${wLabel} ${i} of ${rounds}`, s:work, round:i, rounds:rounds});
+    if (i<rounds) out.push({label:`${rLabel} ${i} of ${rounds}`, s:rest, rest:true, round:i, rounds:rounds});
+  }
+  return out;
+}
+
+const SESSIONS = [
+  { id:"a", tab:"Monday", tabSub:"Session A", title:"Monday — Session A", meta:"30 min, heavy",
+    items:["standing-calf","seated-calf","split-squat","sl-rdl","copenhagen"] },
+  { id:"b", tab:"Wednesday", tabSub:"Session B", title:"Wednesday — Session B", meta:"15–20 min, reactive",
+    items:["pogo","a-skips","band-walk","short-foot","pallof"] },
+  { id:"m", tab:"Modified", tabSub:"Monday", title:"Modified Monday", meta:"Calf or Achilles sore",
+    note:"Calf or Achilles sore: exercises 1 and 2 are replaced by the isometric hold below. Exercises 3, 4 and 5 stay unchanged.",
+    items:["iso-calf","split-squat","sl-rdl","copenhagen"] }
+];
+
+/* =========================================================
+   STATE
+   ========================================================= */
+
+const LS_KEY = "hm-strength-v02";
+let sIdx = 0, eIdx = 0;
+
+try {
+  const saved = JSON.parse(localStorage.getItem(LS_KEY) || "{}");
+  const si = SESSIONS.findIndex(s => s.id === saved.s);
+  if (si > -1) { sIdx = si; eIdx = Math.min(Math.max(saved.e|0,0), SESSIONS[si].items.length-1); }
+} catch(e){}
+
+function persist(){
+  try { localStorage.setItem(LS_KEY, JSON.stringify({s:SESSIONS[sIdx].id, e:eIdx})); } catch(e){}
+}
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const session = () => SESSIONS[sIdx];
+const current = () => EX[session().items[eIdx]];
+
+/* =========================================================
+   TIMER (timestamp-anchored so it never drifts)
+   ========================================================= */
+
+const T = {
+  phases: [], idx: 0, remaining: 0, endAt: 0, running: false,
+  stopwatch: false, elapsed: 0, base: 0, startedAt: 0,
+  raf: 0, presetIdx: 0, wakeLock: null
+};
+
+const timerEl = document.createElement("section");
+timerEl.className = "timer";
+timerEl.innerHTML = `
+  <button class="t-head" id="tHead" type="button" aria-expanded="true" aria-controls="tBody">
+    <span class="lbl">Timer <span class="badge" id="tBadge" hidden>timed</span></span>
+    <span class="caret" id="tCaret">Hide</span>
+  </button>
+  <div class="t-body" id="tBody">
+    <div class="t-phase" id="tPhase"></div>
+    <div class="t-display" id="tDisplay">00:00</div>
+    <div class="t-round" id="tRound"></div>
+    <div class="t-bar"><i id="tFill"></i></div>
+    <div class="t-presets" id="tPresets"></div>
+    <div class="t-controls">
+      <button id="tStart" class="primary" type="button">Start</button>
+      <button id="tPause" type="button" disabled>Pause</button>
+      <button id="tReset" type="button">Reset</button>
+    </div>
+  </div>`;
+
+const tHead=timerEl.querySelector("#tHead"), tBadge=timerEl.querySelector("#tBadge"),
+      tCaret=timerEl.querySelector("#tCaret"), tPhase=timerEl.querySelector("#tPhase"),
+      tDisplay=timerEl.querySelector("#tDisplay"), tRound=timerEl.querySelector("#tRound"),
+      tFill=timerEl.querySelector("#tFill"), tPresets=timerEl.querySelector("#tPresets"),
+      tStart=timerEl.querySelector("#tStart"), tPause=timerEl.querySelector("#tPause"),
+      tReset=timerEl.querySelector("#tReset");
+
+const DEFAULT_PRESETS = [
+  {label:"30 s", phases:[{label:"Work",s:30}]},
+  {label:"60 s", phases:[{label:"Work",s:60}], default:true},
+  {label:"90 s rest", phases:[{label:"Rest",s:90,rest:true}]},
+  {label:"Stopwatch", stopwatch:true}
+];
+
+let activePresets = DEFAULT_PRESETS;
+
+/* --- audio cues, generated in-browser --- */
+let AC = null;
+function beep(times, freq, dur){
+  try{
+    if(!AC) AC = new (window.AudioContext||window.webkitAudioContext)();
+    if(AC.state === "suspended") AC.resume();
+    for(let i=0;i<times;i++){
+      const t0 = AC.currentTime + i*(dur+0.09);
+      const o = AC.createOscillator(), g = AC.createGain();
+      o.type="sine"; o.frequency.value=freq;
+      g.gain.setValueAtTime(0.0001,t0);
+      g.gain.exponentialRampToValueAtTime(0.35,t0+0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);
+      o.connect(g); g.connect(AC.destination); o.start(t0); o.stop(t0+dur+0.02);
+    }
+  }catch(e){}
+}
+async function lockScreen(on){
+  try{
+    if(on && "wakeLock" in navigator && !T.wakeLock){
+      T.wakeLock = await navigator.wakeLock.request("screen");
+      T.wakeLock.addEventListener("release", ()=>{ T.wakeLock = null; });
+    } else if(!on && T.wakeLock){ await T.wakeLock.release(); T.wakeLock = null; }
+  }catch(e){}
+}
+
+function fmt(ms){
+  const total = Math.max(0, Math.ceil(ms/1000));
+  const m = Math.floor(total/60), s = total%60;
+  return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+}
+
+function loadPreset(i, keepCollapsed){
+  stopLoop();
+  T.presetIdx = i;
+  const p = activePresets[i];
+  T.running = false;
+  T.stopwatch = !!p.stopwatch;
+  T.phases = p.stopwatch ? [] : p.phases.map(x=>Object.assign({},x));
+  T.idx = 0;
+  T.elapsed = 0; T.base = 0;
+  T.remaining = T.stopwatch ? 0 : T.phases[0].s*1000;
+  [...tPresets.children].forEach((b,bi)=>b.setAttribute("aria-pressed", bi===i ? "true":"false"));
+  tStart.textContent = "Start"; tStart.disabled = false; tPause.disabled = true;
+  paint(true);
+  if(!keepCollapsed){ /* no-op */ }
+}
+
+function paint(reset){
+  const phase = T.stopwatch ? null : T.phases[T.idx];
+  const isRest = !!(phase && phase.rest);
+  tDisplay.classList.toggle("rest", isRest && !T.done);
+  tDisplay.classList.toggle("done", !!T.done);
+
+  if(T.stopwatch){
+    tPhase.textContent = "Stopwatch";
+    tDisplay.textContent = fmt(T.elapsed);
+    tRound.textContent = T.running ? "Counting up" : "";
+    tFill.style.width = "0%";
+    tFill.classList.remove("rest");
+    return;
+  }
+  tPhase.textContent = T.done ? "Complete" : phase.label;
+  tDisplay.textContent = T.done ? "00:00" : fmt(T.remaining);
+  const total = T.phases.length;
+  tRound.textContent = total > 1 ? `Segment ${Math.min(T.idx+1,total)} of ${total}` : "";
+  const pct = T.done ? 100 : (1 - (T.remaining/(phase.s*1000))) * 100;
+  tFill.style.width = Math.max(0,Math.min(100,pct)) + "%";
+  tFill.classList.toggle("rest", isRest);
+  if(reset){ T.done = false; tDisplay.classList.remove("done"); tFill.style.width = "0%"; }
+}
+
+function loop(){
+  if(!T.running) return;
+  const now = performance.now();
+  if(T.stopwatch){
+    T.elapsed = T.base + (now - T.startedAt);
+    paint();
+  } else {
+    T.remaining = T.endAt - now;
+    if(T.remaining <= 0){
+      const last = T.idx >= T.phases.length - 1;
+      if(last){
+        T.remaining = 0; T.running = false; T.done = true;
+        beep(3, 880, 0.16);
+        tStart.textContent = "Start"; tStart.disabled = false; tPause.disabled = true;
+        lockScreen(false);
+        paint();
+        return;
+      }
+      T.idx++;
+      const nxt = T.phases[T.idx];
+      beep(nxt.rest ? 1 : 2, nxt.rest ? 520 : 760, 0.14);
+      T.endAt = now + nxt.s*1000;
+      T.remaining = nxt.s*1000;
+    }
+    paint();
+  }
+  T.raf = requestAnimationFrame(loop);
+}
+function stopLoop(){ if(T.raf) cancelAnimationFrame(T.raf); T.raf = 0; }
+
+function startTimer(){
+  if(T.running) return;
+  if(T.done) loadPreset(T.presetIdx);
+  beep(1, 660, 0.1);
+  T.running = true;
+  const now = performance.now();
+  if(T.stopwatch){ T.startedAt = now; }
+  else { T.endAt = now + (T.remaining > 0 ? T.remaining : T.phases[T.idx].s*1000); }
+  tStart.disabled = true; tPause.disabled = false; tStart.textContent = "Running";
+  lockScreen(true);
+  stopLoop(); T.raf = requestAnimationFrame(loop);
+}
+function pauseTimer(){
+  if(!T.running) return;
+  T.running = false; stopLoop();
+  if(T.stopwatch) T.base = T.elapsed; else T.remaining = Math.max(0, T.endAt - performance.now());
+  tStart.disabled = false; tPause.disabled = true; tStart.textContent = "Resume";
+  lockScreen(false);
+  paint();
+}
+function resetTimer(){ lockScreen(false); loadPreset(T.presetIdx); }
+
+tStart.addEventListener("click", startTimer);
+tPause.addEventListener("click", pauseTimer);
+tReset.addEventListener("click", resetTimer);
+tHead.addEventListener("click", ()=>{
+  const collapsed = timerEl.classList.toggle("collapsed");
+  tHead.setAttribute("aria-expanded", String(!collapsed));
+  tCaret.textContent = collapsed ? "Show" : "Hide";
+});
+document.addEventListener("visibilitychange", ()=>{ if(!document.hidden && T.running) paint(); });
+
+function configureTimer(ex){
+  pauseTimer();
+  T.done = false;
+  const timed = !!ex.timer;
+  activePresets = timed ? ex.timer.presets.concat([{label:"Stopwatch", stopwatch:true}]) : DEFAULT_PRESETS;
+  tBadge.hidden = !timed;
+  timerEl.classList.toggle("timed", timed);
+  timerEl.classList.toggle("collapsed", !timed);
+  tHead.setAttribute("aria-expanded", String(timed));
+  tCaret.textContent = timed ? "Hide" : "Show";
+  tPresets.innerHTML = "";
+  activePresets.forEach((p,i)=>{
+    const b = document.createElement("button");
+    b.type="button"; b.className="preset"; b.textContent = p.label;
+    b.setAttribute("aria-pressed","false");
+    b.addEventListener("click", ()=>loadPreset(i));
+    tPresets.appendChild(b);
+  });
+  const def = Math.max(0, activePresets.findIndex(p=>p.default));
+  loadPreset(def);
+}
+
+/* =========================================================
+   RENDER
+   ========================================================= */
+
+function buildTabs(){
+  const tabs = $("tabs");
+  tabs.innerHTML = "";
+  SESSIONS.forEach((s,i)=>{
+    const b = document.createElement("button");
+    b.type="button"; b.className="tab"; b.id = "tab-"+s.id;
+    b.setAttribute("role","tab");
+    b.setAttribute("aria-selected", String(i===sIdx));
+    b.innerHTML = `${esc(s.tab)}<span class="tab-sub">${esc(s.tabSub)}</span>`;
+    b.addEventListener("click", ()=>{ if(i!==sIdx){ sIdx=i; eIdx=0; render(); } });
+    tabs.appendChild(b);
+  });
+}
+
+function buildJump(){
+  const sel = $("jump");
+  sel.innerHTML = "";
+  session().items.forEach((id,i)=>{
+    const o = document.createElement("option");
+    o.value = String(i);
+    o.textContent = `${i+1}. ${EX[id].name}`;
+    sel.appendChild(o);
+  });
+  sel.value = String(eIdx);
+}
+
+function stepsHTML(groups){
+  return groups.map(g=>`
+    ${groups.length>1 ? `<div class="sub-t">${esc(g.title)}</div>` : ""}
+    <ol class="steps">${g.steps.map(s=>`<li>${esc(s)}</li>`).join("")}</ol>
+  `).join("");
+}
+
+function renderCard(){
+  const ex = current(), s = session();
+  const chips = ex.chips.map(c=>`<div class="chip${c.hero?" hero":""}"><span class="k">${esc(c.k)}</span><span class="v">${esc(c.v)}</span></div>`).join("");
+  const cues = (ex.cues||[]).map(c=>`
+    <div class="callout ${c.kind==="rule"?"rule":""}">
+      <h4>${esc(c.t)}</h4><p>${esc(c.b)}</p>
+    </div>`).join("");
+  const mistakes = ex.mistakes.map(m=>`
+    ${m.t ? `<div class="sub-t">${esc(m.t)}</div>` : ""}
+    <ul class="dots bad">${m.items.map(i=>`<li>${esc(i)}</li>`).join("")}</ul>
+  `).join("");
+
+  $("card").innerHTML = `
+    <div class="card-head">
+      <div class="eyebrow">${esc(s.title)} &middot; Exercise ${eIdx+1} of ${s.items.length}</div>
+      <h2>${esc(ex.name)}${ex.alias ? ` <span style="color:var(--muted);font-weight:600;font-size:.72em;display:block;margin-top:4px">${esc(ex.alias)}</span>` : ""}</h2>
+      <div class="chips">${chips}</div>
+    </div>
+    <div class="card-body">
+      <section class="blk">
+        <h3 class="blk-t">Setup</h3>
+        <p>${esc(ex.setup)}</p>
+      </section>
+      <section class="blk">
+        <h3 class="blk-t">Step by step</h3>
+        ${stepsHTML(ex.stepGroups)}
+      </section>
+      <section class="blk">
+        <h3 class="blk-t good">What to feel</h3>
+        <div class="callout feel"><p>${esc(ex.feel)}</p></div>
+      </section>
+      ${cues ? `<section class="blk"><h3 class="blk-t">Key cues</h3>${cues}</section>` : ""}
+      ${ex.altSteps ? `<section class="blk">
+          <h3 class="blk-t">Alternative</h3>
+          <div class="sub-t">${esc(ex.altTitle)}</div>
+          <ol class="steps">${ex.altSteps.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>
+        </section>` : ""}
+      <section class="blk">
+        <h3 class="blk-t warn">Common mistakes</h3>
+        ${mistakes}
+      </section>
+      <div id="timerSlot"></div>
+    </div>`;
+
+  $("timerSlot").appendChild(timerEl);
+  configureTimer(ex);
+}
+
+function renderChrome(){
+  const s = session();
+  [...$("tabs").children].forEach((b,i)=>b.setAttribute("aria-selected", String(i===sIdx)));
+  const note = $("sessionNote");
+  if(s.note){ note.textContent = s.note; note.classList.remove("hide"); }
+  else { note.classList.add("hide"); }
+
+  const n = s.items.length;
+  $("counter").textContent = `${eIdx+1} of ${n}`;
+  $("pfill").style.width = ((eIdx+1)/n*100) + "%";
+  $("prevBtn").disabled = eIdx === 0;
+  $("nextBtn").disabled = eIdx === n-1;
+
+  const ex = current();
+  const q = ex.video || (ex.name + " exercise");
+  $("videoBtn").href = "https://www.youtube.com/results?search_query=" + encodeURIComponent(q + " tutorial");
+  $("videoBtn").setAttribute("aria-label", "Watch video demo of " + ex.name);
+  $("googleBtn").href = "https://www.google.com/search?q=" + encodeURIComponent(ex.name + " exercise video tutorial") + "&tbm=vid";
+}
+
+function render(){
+  buildTabs();
+  buildJump();
+  renderCard();
+  renderChrome();
+  persist();
+  $("main").scrollTop = 0;
+}
+
+function go(delta){
+  const n = session().items.length;
+  const t = eIdx + delta;
+  if(t < 0 || t >= n) return;
+  eIdx = t;
+  buildJump(); renderCard(); renderChrome(); persist();
+  $("main").scrollTop = 0;
+}
+
+/* =========================================================
+   EVENTS
+   ========================================================= */
+
+$("prevBtn").addEventListener("click", ()=>go(-1));
+$("nextBtn").addEventListener("click", ()=>go(1));
+$("jump").addEventListener("change", e=>{
+  eIdx = parseInt(e.target.value,10) || 0;
+  renderCard(); renderChrome(); persist(); $("main").scrollTop = 0;
+});
+
+document.addEventListener("keydown", e=>{
+  const tag = (e.target.tagName || "").toLowerCase();
+  if(tag === "select" || tag === "input" || tag === "textarea") return;
+  if(e.key === "ArrowRight"){ e.preventDefault(); go(1); }
+  else if(e.key === "ArrowLeft"){ e.preventDefault(); go(-1); }
+  else if(e.code === "Space"){ e.preventDefault(); T.running ? pauseTimer() : startTimer(); }
+  else if(e.key === "r" || e.key === "R"){ resetTimer(); }
+});
+
+/* horizontal swipe between exercises (ignores vertical scroll) */
+(function(){
+  const el = $("main");
+  let x0=null, y0=null, lock=null;
+  el.addEventListener("touchstart", e=>{
+    if(e.touches.length!==1) return;
+    x0=e.touches[0].clientX; y0=e.touches[0].clientY; lock=null;
+  }, {passive:true});
+  el.addEventListener("touchmove", e=>{
+    if(x0===null) return;
+    const dx=e.touches[0].clientX-x0, dy=e.touches[0].clientY-y0;
+    if(lock===null && (Math.abs(dx)>10 || Math.abs(dy)>10)) lock = Math.abs(dx)>Math.abs(dy)?"x":"y";
+  }, {passive:true});
+  el.addEventListener("touchend", e=>{
+    if(x0===null || lock!=="x"){ x0=null; return; }
+    const dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>65) go(dx<0?1:-1);
+    x0=null; lock=null;
+  }, {passive:true});
+})();
+
+render();
+</script>
+</body>
+</html>
