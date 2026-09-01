@@ -56,14 +56,22 @@ button{cursor:pointer;border:0;background:none;color:inherit}
 .app{
   display:flex; flex-direction:column;
   height:100vh; height:100dvh;
+  position:relative;
 }
 
 /* ---------- HEADER ---------- */
 header.top{
-  flex:0 0 auto;
+  position:fixed; top:0; left:0; right:0; z-index:30;
+  transform:translate3d(0,0,0);
+  will-change:transform;
   background:linear-gradient(180deg,var(--bg2),var(--bg));
   border-bottom:1px solid var(--line);
   padding:calc(10px + env(safe-area-inset-top)) calc(14px + env(safe-area-inset-right)) 10px calc(14px + env(safe-area-inset-left));
+}
+header.top.settling{transition:transform .2s cubic-bezier(.2,.7,.3,1)}
+header.top.raised{box-shadow:0 8px 20px rgba(0,0,0,.30)}
+@media (prefers-color-scheme: light){
+  header.top.raised{box-shadow:0 8px 18px rgba(20,40,60,.13)}
 }
 .top-inner{max-width:var(--maxw);margin:0 auto}
 .brand{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px}
@@ -103,7 +111,9 @@ select#jump{
 /* ---------- MAIN ---------- */
 main{
   flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;
-  padding:14px calc(14px + env(safe-area-inset-right)) 26px calc(14px + env(safe-area-inset-left));
+  overscroll-behavior-y:contain;
+  padding:calc(var(--head-h,168px) + 12px) calc(14px + env(safe-area-inset-right)) 26px calc(14px + env(safe-area-inset-left));
+  scroll-padding-top:calc(var(--head-h,168px) + 12px);
 }
 .card{
   max-width:var(--maxw);margin:0 auto;
@@ -254,6 +264,14 @@ footer.bottom{
   .bottom-inner{flex-direction:row-reverse;align-items:center;gap:12px}
   .video-row{flex:0 0 auto;max-width:320px}
   .nav-row{flex:1 1 auto}
+}
+@media (max-height:760px){
+  .bottom-inner{gap:6px}
+  .btn-video,.btn-alt{min-height:42px;padding:9px 11px;font-size:.84rem}
+  .nav-btn{min-height:46px}
+  header.top{padding-bottom:8px}
+  .brand{margin-bottom:8px}
+  .jump-row{margin-top:8px}
 }
 .kbd-hint{display:none;font-size:.68rem;color:var(--muted);text-align:center;margin-top:2px}
 @media (hover:hover) and (pointer:fine){.kbd-hint{display:block}}
@@ -960,6 +978,7 @@ function render(){
   renderChrome();
   persist();
   $("main").scrollTop = 0;
+  if(window.showHeader) window.showHeader();
 }
 
 function go(delta){
@@ -969,6 +988,7 @@ function go(delta){
   eIdx = t;
   buildJump(); renderCard(); renderChrome(); persist();
   $("main").scrollTop = 0;
+  if(window.showHeader) window.showHeader();
 }
 
 /* =========================================================
@@ -979,7 +999,9 @@ $("prevBtn").addEventListener("click", ()=>go(-1));
 $("nextBtn").addEventListener("click", ()=>go(1));
 $("jump").addEventListener("change", e=>{
   eIdx = parseInt(e.target.value,10) || 0;
-  renderCard(); renderChrome(); persist(); $("main").scrollTop = 0;
+  renderCard(); renderChrome(); persist();
+  $("main").scrollTop = 0;
+  if(window.showHeader) window.showHeader();
 });
 
 document.addEventListener("keydown", e=>{
@@ -1010,6 +1032,72 @@ document.addEventListener("keydown", e=>{
     if(Math.abs(dx)>65) go(dx<0?1:-1);
     x0=null; lock=null;
   }, {passive:true});
+})();
+
+/* =========================================================
+   DYNAMIC HEADER — hides as you scroll into the card,
+   returns 1:1 as you scroll back up
+   ========================================================= */
+(function(){
+  const head = document.querySelector("header.top");
+  const main = $("main");
+  const app  = document.querySelector(".app");
+  let headH = 0, offset = 0, lastY = 0, ticking = false, settleTimer = 0, settleClass = 0;
+
+  function measure(){
+    const h = head.offsetHeight;
+    if(h === headH) return;
+    headH = h;
+    app.style.setProperty("--head-h", headH + "px");
+    if(offset > headH) offset = headH;
+    apply();
+  }
+
+  function apply(animate){
+    if(animate){
+      head.classList.add("settling");
+      clearTimeout(settleClass);
+      settleClass = setTimeout(()=>head.classList.remove("settling"), 260);
+    }
+    head.style.transform = "translate3d(0,-" + offset + "px,0)";
+    head.classList.toggle("raised", main.scrollTop > 4 && offset < headH - 1);
+  }
+
+  function settle(){
+    if(offset <= 0 || offset >= headH) return;
+    offset = offset > headH * 0.45 ? headH : 0;
+    apply(true);
+  }
+
+  function onScroll(){
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(()=>{
+      ticking = false;
+      const y  = main.scrollTop;
+      const dy = y - lastY;
+      lastY = y;
+      const atEnd = (main.scrollHeight - y - main.clientHeight) < 2;
+      if(y <= 0)              offset = 0;                                   // top: always show
+      else if(atEnd && dy>0)  { /* iOS rubber-band at the end: ignore */ }
+      else                    offset = Math.min(headH, Math.max(0, offset + dy));
+      apply(false);
+      clearTimeout(settleTimer);
+      settleTimer = setTimeout(settle, 160);
+    });
+  }
+
+  window.showHeader = function(){
+    offset = 0; lastY = main.scrollTop;
+    apply(true);
+  };
+
+  main.addEventListener("scroll", onScroll, {passive:true});
+  window.addEventListener("resize", measure);
+  window.addEventListener("orientationchange", ()=>setTimeout(measure, 260));
+  if(window.ResizeObserver) new ResizeObserver(measure).observe(head);
+  if(window.visualViewport) visualViewport.addEventListener("resize", measure);
+  measure();
 })();
 
 render();
