@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en-AU" data-theme="auto">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Client-side fluid, carbohydrate and sodium calculator for distance runners.">
+<title>Runner Fuel &amp; Fluid Calculator</title>
+<style>
+:root{
+  --bg:#f4f6f9; --surface:#ffffff; --surface-2:#eef1f6; --border:#d8dee9;
+  --text:#141a22; --muted:#5b6675; --accent:#0a6ec4; --accent-soft:#e3f0fc;
+  --warn-bg:#fff4e0; --warn-border:#e08b00; --warn-text:#6b3d00;
+  --alert-bg:#fdeaea; --alert-border:#c62828; --alert-text:#7d1a1a;
+  --info-bg:#e8f5ee; --info-border:#177245; --info-text:#0f4f30;
+  --radius:14px; --shadow:0 1px 3px rgba(16,24,40,.08),0 1px 2px rgba(16,24,40,.04);
+}
+@media (prefers-color-scheme:dark){
+  :root[data-theme="auto"]{
+    --bg:#0f1419; --surface:#171d24; --surface-2:#1f262f; --border:#2c3540;
+    --text:#e6ebf1; --muted:#9aa6b4; --accent:#4da3ff; --accent-soft:#16283c;
+    --warn-bg:#33260f; --warn-border:#d99b28; --warn-text:#f5d9a5;
+    --alert-bg:#3a1a1a; --alert-border:#ef5350; --alert-text:#ffc9c7;
+    --info-bg:#132a1f; --info-border:#5ec98d; --info-text:#b6e8cd;
+    --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1419; --surface:#171d24; --surface-2:#1f262f; --border:#2c3540;
+  --text:#e6ebf1; --muted:#9aa6b4; --accent:#4da3ff; --accent-soft:#16283c;
+  --warn-bg:#33260f; --warn-border:#d99b28; --warn-text:#f5d9a5;
+  --alert-bg:#3a1a1a; --alert-border:#ef5350; --alert-text:#ffc9c7;
+  --info-bg:#132a1f; --info-border:#5ec98d; --info-text:#b6e8cd;
+  --shadow:none;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size:16px; line-height:1.5;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+.wrap{max-width:760px;margin:0 auto;padding:16px 14px 64px}
+header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px}
+h1{font-size:1.35rem;margin:0 0 4px;letter-spacing:-.02em}
+.sub{color:var(--muted);font-size:.85rem;margin:0}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:var(--shadow)}
+h2{font-size:.78rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin:0 0 14px;font-weight:700}
+h3{font-size:1rem;margin:18px 0 8px}
+label{display:block;font-size:.85rem;font-weight:600;margin-bottom:6px}
+.hint{font-size:.78rem;color:var(--muted);margin:6px 0 0}
+input[type=number],select{
+  width:100%;min-height:48px;padding:10px 12px;font-size:16px;
+  background:var(--surface-2);color:var(--text);
+  border:1px solid var(--border);border-radius:10px;
+  -webkit-appearance:none;appearance:none;
+}
+input[type=number]:focus-visible,select:focus-visible,button:focus-visible,summary:focus-visible{
+  outline:2px solid var(--accent);outline-offset:2px}
+.grid{display:grid;gap:12px}
+.g2{grid-template-columns:1fr 1fr}
+@media (max-width:520px){.g2{grid-template-columns:1fr}}
+.field{margin-bottom:16px}
+.field:last-child{margin-bottom:0}
+.pace-row{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}
+.colon{font-weight:700;color:var(--muted);text-align:center}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{
+  min-height:44px;padding:10px 14px;font-size:.88rem;font-weight:600;
+  background:var(--surface-2);color:var(--text);border:1px solid var(--border);
+  border-radius:999px;cursor:pointer;flex:1 1 auto;
+  -webkit-tap-highlight-color:transparent;
+}
+.pill[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+input[type=range]{
+  width:100%;height:44px;background:transparent;-webkit-appearance:none;appearance:none;margin:0}
+input[type=range]::-webkit-slider-runnable-track{height:8px;border-radius:4px;background:var(--surface-2);border:1px solid var(--border)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;border-radius:50%;background:var(--accent);border:3px solid var(--surface);margin-top:-12px}
+input[type=range]::-moz-range-track{height:8px;border-radius:4px;background:var(--surface-2);border:1px solid var(--border)}
+input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:var(--accent);border:3px solid var(--surface)}
+.ticks{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);margin-top:-2px}
+.readout{font-variant-numeric:tabular-nums;font-weight:700;color:var(--accent)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.stat{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:12px}
+.stat .k{font-size:.74rem;color:var(--muted);font-weight:600;line-height:1.3;min-height:2.4em}
+.stat .v{font-size:1.5rem;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-top:4px}
+.stat .u{font-size:.8rem;color:var(--muted);font-weight:500}
+.stat.hero{background:var(--accent-soft);border-color:var(--accent)}
+.stat.hero .v{color:var(--accent)}
+.banner{border-radius:12px;padding:14px;margin:12px 0;font-size:.88rem;border-left:5px solid}
+.banner strong{display:block;margin-bottom:4px;font-size:.92rem}
+.banner.warn{background:var(--warn-bg);border-color:var(--warn-border);color:var(--warn-text)}
+.banner.alert{background:var(--alert-bg);border-color:var(--alert-border);color:var(--alert-text)}
+.banner.info{background:var(--info-bg);border-color:var(--info-border);color:var(--info-text)}
+.banner p{margin:6px 0 0}
+details{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:14px;overflow:hidden}
+summary{
+  min-height:56px;display:flex;align-items:center;gap:10px;padding:14px 16px;
+  font-weight:700;cursor:pointer;list-style:none;font-size:.95rem}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";margin-left:auto;font-size:1.4rem;color:var(--accent);font-weight:400;line-height:1}
+details[open] summary::after{content:"\2212"}
+.details-body{padding:0 16px 18px;border-top:1px solid var(--border);padding-top:14px}
+table{width:100%;border-collapse:collapse;font-size:.87rem;margin:8px 0}
+th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--border);vertical-align:top}
+th{font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+ol,ul{padding-left:20px;margin:8px 0}
+li{margin-bottom:7px;font-size:.9rem}
+.btn{
+  min-height:48px;padding:12px 18px;font-size:.92rem;font-weight:700;cursor:pointer;
+  background:var(--accent);color:#fff;border:1px solid var(--accent);border-radius:10px;width:100%}
+.btn.sec{background:var(--surface-2);color:var(--text);border-color:var(--border)}
+.theme-btn{min-height:44px;min-width:44px;padding:8px 12px;border-radius:10px;background:var(--surface-2);
+  color:var(--text);border:1px solid var(--border);font-size:.8rem;font-weight:600;cursor:pointer;white-space:nowrap}
+.note{font-size:.8rem;color:var(--muted);margin-top:12px}
+footer{font-size:.78rem;color:var(--muted);text-align:center;margin-top:24px;line-height:1.6}
+.tag{display:inline-block;background:var(--surface-2);border:1px solid var(--border);border-radius:6px;
+  padding:1px 7px;font-size:.75rem;font-weight:600;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div>
+    <h1>Fuel &amp; Fluid Calculator</h1>
+    <p class="sub">Fluid, carbohydrate and sodium planning for distance running. Runs entirely on your device.</p>
+  </div>
+  <button class="theme-btn" id="themeBtn" type="button" aria-label="Change colour theme">Auto</button>
+</header>
+
+<div id="errBox"></div>
+
+<!-- ============ INPUTS ============ -->
+<section class="card">
+  <h2>Your session</h2>
+
+  <div class="field">
+    <label for="weight">Body weight (kg)</label>
+    <input type="number" id="weight" value="70" min="35" max="200" step="0.5" inputmode="decimal">
+  </div>
+
+  <div class="grid g2 field">
+    <div>
+      <label for="distSel">Distance preset</label>
+      <select id="distSel">
+        <option value="">Custom</option>
+        <option value="5">5 km</option>
+        <option value="10">10 km</option>
+        <option value="15">15 km</option>
+        <option value="16">16 km</option>
+        <option value="18">18 km</option>
+        <option value="21.1" selected>21.1 km, half marathon</option>
+        <option value="30">30 km</option>
+        <option value="42.2">42.2 km, marathon</option>
+      </select>
+    </div>
+    <div>
+      <label for="dist">Distance (km)</label>
+      <input type="number" id="dist" value="21.1" min="1" max="100" step="0.1" inputmode="decimal">
+    </div>
+  </div>
+
+  <div class="grid g2 field">
+    <div>
+      <label for="paceSel">Pace preset</label>
+      <select id="paceSel"><option value="">Custom</option></select>
+    </div>
+    <div>
+      <label for="paceMin">Pace (min : sec per km)</label>
+      <div class="pace-row">
+        <input type="number" id="paceMin" value="4" min="2" max="12" step="1" inputmode="numeric" aria-label="Pace minutes per km">
+        <span class="colon">:</span>
+        <input type="number" id="paceSec" value="55" min="0" max="59" step="1" inputmode="numeric" aria-label="Pace seconds per km">
+      </div>
+    </div>
+  </div>
+  <p class="hint" id="durLine">Duration: &mdash;</p>
+</section>
+
+<section class="card">
+  <h2>Conditions</h2>
+
+  <div class="field">
+    <label>Weather preset</label>
+    <div class="pills" id="tempPills">
+      <button class="pill" type="button" data-temp="12" aria-pressed="false">Cool 12&deg;C</button>
+      <button class="pill" type="button" data-temp="16" aria-pressed="false">Ideal 16&deg;C</button>
+      <button class="pill" type="button" data-temp="22" aria-pressed="false">Warm 22&deg;C</button>
+      <button class="pill" type="button" data-temp="28" aria-pressed="false">Hot 28&deg;C</button>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="temp">Ambient temperature: <span class="readout" id="tempOut">16&deg;C</span></label>
+    <input type="range" id="temp" min="5" max="35" step="1" value="16">
+    <div class="ticks"><span>5&deg;C</span><span>20&deg;C</span><span>35&deg;C</span></div>
+  </div>
+
+  <div class="field">
+    <label for="sweat">Personal sweat rate: <span class="readout" id="sweatOut">Mild, 1.0 L/hr</span></label>
+    <input type="range" id="sweat" min="0" max="3" step="1" value="1">
+    <div class="ticks"><span>Little</span><span>Mild</span><span>Moderate</span><span>Heavy</span></div>
+    <p class="hint">Baselines are calibrated at 18&deg;C. To measure your own: weigh yourself undressed before and after a 60 minute run, add back any fluid drunk, then 1 kg lost is roughly 1 L of sweat.</p>
+  </div>
+
+  <div class="field">
+    <div class="pills">
+      <button class="pill" type="button" id="sunBtn" aria-pressed="false">Humid or full sun (+15%)</button>
+    </div>
+    <p class="hint">Dry-bulb temperature alone under-reads thermal strain in humid or unshaded conditions. Apply this for late-morning starts with little shade.</p>
+  </div>
+</section>
+
+<!-- ============ RESULTS ============ -->
+<section class="card">
+  <h2>Your plan</h2>
+  <div class="stats">
+    <div class="stat"><div class="k">Estimated total sweat loss</div><div class="v" id="oSweat">&mdash;</div><div class="u" id="oSweatRate">&mdash;</div></div>
+    <div class="stat"><div class="k">Allowable deficit at 2% body mass</div><div class="v" id="oDeficit">&mdash;</div><div class="u">ceiling, not a target</div></div>
+    <div class="stat hero"><div class="k">Recommended fluid intake</div><div class="v" id="oFluid">&mdash;</div><div class="u" id="oFluidRate">&mdash;</div></div>
+    <div class="stat"><div class="k">Aid station cups (~90 mL ingested each)</div><div class="v" id="oCups">&mdash;</div><div class="u">pinched V-spout technique</div></div>
+    <div class="stat hero"><div class="k">Carbohydrate target</div><div class="v" id="oCarb">&mdash;</div><div class="u" id="oCarbRate">&mdash;</div></div>
+    <div class="stat"><div class="k">Sodium target</div><div class="v" id="oSodium">&mdash;</div><div class="u" id="oSodiumRate">&mdash;</div></div>
+  </div>
+
+  <div id="banners"></div>
+
+  <h3>Gel timing</h3>
+  <div id="gelPlan"></div>
+
+  <button class="btn sec" type="button" id="copyBtn" style="margin-top:10px">Copy race card to clipboard</button>
+  <p class="hint" id="copyMsg" aria-live="polite"></p>
+</section>
+
+<!-- ============ RECIPE ============ -->
+<details>
+  <summary>DIY sucrose gel recipe (batch scaler)</summary>
+  <div class="details-body">
+    <p class="hint" style="margin-top:0">Sucrose hydrolyses to a 1:1 glucose to fructose ratio, which is what dual-transporter absorption (SGLT1 and GLUT5) wants. One flask yields roughly 95 mL containing about 70 g of carbohydrate.</p>
+
+    <label style="margin-top:14px">Batch size</label>
+    <div class="pills" id="batchPills">
+      <button class="pill" type="button" data-n="1" aria-pressed="true">1 flask</button>
+      <button class="pill" type="button" data-n="2" aria-pressed="false">2 flasks</button>
+      <button class="pill" type="button" data-n="3" aria-pressed="false">3 flasks</button>
+      <button class="pill" type="button" data-n="4" aria-pressed="false">4 flasks</button>
+    </div>
+    <p class="hint">Batch total: <span class="readout" id="batchCarb">~70 g carbohydrate</span></p>
+
+    <table>
+      <thead><tr><th>Ingredient</th><th>Amount</th></tr></thead>
+      <tbody>
+        <tr><td>White sugar (sucrose)</td><td class="num" id="rSugar">70 g</td></tr>
+        <tr><td>Water</td><td class="num" id="rWater">45 mL</td></tr>
+        <tr><td>Table salt (NaCl)</td><td class="num" id="rSalt">0.75 g, 290 mg sodium, 1/8 tsp</td></tr>
+        <tr><td>Fresh lemon juice</td><td class="num" id="rLemon">10 mL (~1/4 lemon)</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Method</h3>
+    <ol>
+      <li>Combine sugar, water, salt and lemon juice in a small saucepan.</li>
+      <li>Heat gently, stirring, until the sugar has fully dissolved. Do not let it colour.</li>
+      <li>Simmer for 2 minutes. The citric acid partially inverts the sucrose into free glucose and fructose, which is what stops the syrup crystallising back out as it cools.</li>
+      <li>Cool completely to room temperature before filling. Hot syrup will deform a TPU soft flask.</li>
+      <li>Transfer to a 150 mL wide-spout soft flask. Avoid bite valves, they clog at this viscosity.</li>
+      <li>Keeps about 2 weeks refrigerated. If it still crystallises, swap 15 g of the sugar for golden syrup.</li>
+    </ol>
+    <p class="note"><span class="tag">Note</span> This is a concentrated gel, roughly 65 to 70% w/v. It is designed to be swallowed and chased with plain water, never sipped as a drink. Diluting it into a bottle produces a solution well above 8% carbohydrate, which slows gastric emptying and draws water into the gut lumen.</p>
+  </div>
+</details>
+
+<!-- ============ PROTOCOL ============ -->
+<details>
+  <summary>In-run fuelling and race protocol checklist</summary>
+  <div class="details-body">
+    <h3 style="margin-top:0">Timing</h3>
+    <table>
+      <thead><tr><th>When</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td class="num">T&minus;2.5 to 3 hr</td><td>High-carbohydrate, low-fibre, low-fat meal. Nothing untested.</td></tr>
+        <tr><td class="num">T&minus;45 to 60 min</td><td>30 g carbohydrate plus 400 mL fluid. Optional caffeine at 3 mg/kg (<span id="caffOut">&mdash;</span> for your weight).</td></tr>
+        <tr><td class="num">T&minus;30 min</td><td>Stop drinking. Final toilet stop.</td></tr>
+        <tr><td class="num">In run</td><td>Take one third of a flask about 200 m <em>before</em> an aid station or fountain, never after, then chase with plain water.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Aid station technique</h3>
+    <ul>
+      <li>Pinch the paper cup rim closed into a narrow V-spout. This is the difference between ingesting 40 mL and 100 mL.</li>
+      <li>Expect 80 to 110 mL per cup with good technique, 120 to 150 mL if you walk through, 40 to 70 mL if you grab and drink at full pace.</li>
+      <li>Practise it once at a park tap before race day. It is the highest-yield skill on this page.</li>
+      <li>Confirm at the expo which stations carry plain water and which carry sports drink. Landing a high-concentration drink mix on top of your own gel is a bad afternoon, and race day is not the time to debut an untested product.</li>
+    </ul>
+
+    <h3>Sequencing rule</h3>
+    <p style="font-size:.9rem">Concentrated carbohydrate sitting undiluted in the stomach is what produces cramping and nausea. Gel first, water within the next 200 m, every time.</p>
+
+    <h3>Rehearsal</h3>
+    <ul>
+      <li>Run at least two long sessions with the exact flask, exact syrup, exact caffeine timing and exact start time you intend to race with.</li>
+      <li>Gut tolerance is trainable. Intestinal transporter expression responds to repeated in-run carbohydrate exposure over roughly 4 to 6 weeks, so start early and do it on every long run.</li>
+      <li>Nothing new in the final fortnight.</li>
+    </ul>
+  </div>
+</details>
+
+<details>
+  <summary>How these numbers are calculated</summary>
+  <div class="details-body">
+    <ul style="margin-top:0">
+      <li><strong>Duration</strong> = distance &times; pace.</li>
+      <li><strong>Adjusted sweat rate</strong> = baseline &times; (1 + 0.025 &times; (temp &minus; 18)), floored at 50% of baseline, then &times; 1.15 if the humidity or sun modifier is on.</li>
+      <li><strong>Allowable deficit</strong> = body mass &times; 0.02. Performance decrement becomes consistent beyond roughly 2 to 3% body mass loss, so this is an envelope you are permitted to finish inside, not a volume you must drink up to.</li>
+      <li><strong>Replacement need</strong> = sweat loss &minus; allowable deficit, floored at zero. This is deliberately conservative. It ignores metabolic water production and water liberated from glycogen breakdown, which together contribute in the order of 100 to 200 mL per hour, so real-world need is usually a little lower than shown.</li>
+      <li><strong>Absorption ceiling</strong> = 750 mL/hr. Gastric emptying of a low-carbohydrate fluid tops out around 600 to 1000 mL/hr and falls further with rising intensity and dehydration. The recommendation is capped here regardless of calculated need.</li>
+      <li><strong>Carbohydrate</strong>: nil under 45 min; 15 to 30 g or a mouth rinse for 45 to 75 min; 30 to 60 g/hr beyond 75 min; 60 to 90 g/hr beyond 150 min, which requires a glucose and fructose blend to exceed the roughly 60 g/hr SGLT1 saturation point for glucose alone.</li>
+      <li><strong>Sodium</strong>: 300 to 600 mg/hr for sessions over 90 min. Sweat sodium concentration varies roughly fourfold between individuals and cannot be estimated from a calculator.</li>
+    </ul>
+    <p class="note">Estimates only. Individual sweat rate and sweat sodium vary widely and are best established by direct measurement. This tool is general information for healthy adults, not medical advice, and is not appropriate for anyone with cardiac, renal or endocrine disease, or taking diuretics, SGLT2 inhibitors or other agents affecting fluid and electrolyte balance.</p>
+  </div>
+</details>
+
+<footer>No data leaves your device. Nothing is stored or transmitted.</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  function showError(msg){
+    var box = document.getElementById("errBox");
+    if (box) box.innerHTML = '<div class="banner alert"><strong>Script error</strong>' + msg + '</div>';
+  }
+  window.addEventListener("error", function(e){
+    showError(String(e.message) + " (line " + e.lineno + ")");
+  });
+
+  var $ = function(id){ return document.getElementById(id); };
+
+  var SWEAT = [
+    {v:0.8, name:"Little"},
+    {v:1.0, name:"Mild"},
+    {v:1.2, name:"Moderate"},
+    {v:1.4, name:"Heavy"}
+  ];
+  var CUP_ML = 90;
+  var CEILING_L_HR = 0.750;
+  var FLASK_G = 70;
+  var THIRD_G = Math.round(FLASK_G / 3);
+  var TSP = ["1/8","1/4","3/8","1/2"];
+  var LEMON = ["1/4","1/2","3/4","1 whole"];
+
+  function clamp(n, lo, hi){ return Math.min(hi, Math.max(lo, n)); }
+  function num(el, fallback){
+    var v = parseFloat(el.value);
+    return isFinite(v) ? v : fallback;
+  }
+  function pad(x){ return (x < 10 ? "0" : "") + x; }
+  function fmtTime(hrs){
+    var t = Math.round(hrs * 3600);
+    var h = Math.floor(t/3600), m = Math.floor((t%3600)/60), s = t%60;
+    return h > 0 ? h + ":" + pad(m) + ":" + pad(s) : m + ":" + pad(s);
+  }
+  function paceLabel(sec){ return Math.floor(sec/60) + ":" + pad(sec%60); }
+  function round50(ml){ return Math.round(ml/50)*50; }
+  function each(list, fn){ Array.prototype.forEach.call(list, fn); }
+
+  /* ---------- build pace preset options: 4:00 to 6:30 in 15 s steps ---------- */
+  (function buildPaces(){
+    var sel = $("paceSel");
+    var frag = document.createDocumentFragment();
+    for (var s = 240; s <= 390; s += 15){
+      var o = document.createElement("option");
+      o.value = String(s);
+      o.textContent = paceLabel(s) + " /km";
+      frag.appendChild(o);
+    }
+    sel.appendChild(frag);
+    sel.value = "";
+  })();
+
+  /* ---------- theme toggle ---------- */
+  var themes = ["auto","light","dark"], ti = 0;
+  $("themeBtn").addEventListener("click", function(){
+    ti = (ti + 1) % themes.length;
+    document.documentElement.setAttribute("data-theme", themes[ti]);
+    this.textContent = themes[ti].charAt(0).toUpperCase() + themes[ti].slice(1);
+  });
+
+  /* ---------- pace helpers ---------- */
+  function paceSeconds(){
+    var m = clamp(Math.round(num($("paceMin"), 5)), 2, 12);
+    var s = clamp(Math.round(num($("paceSec"), 0)), 0, 59);
+    return m*60 + s;
+  }
+
+  function syncSelects(){
+    var d = num($("dist"), 0);
+    var ds = $("distSel");
+    ds.value = "";
+    for (var i = 0; i < ds.options.length; i++){
+      var ov = ds.options[i].value;
+      if (ov && Math.abs(parseFloat(ov) - d) < 0.001){ ds.value = ov; break; }
+    }
+    var ps = $("paceSel"), sec = String(paceSeconds());
+    ps.value = "";
+    for (var j = 0; j < ps.options.length; j++){
+      if (ps.options[j].value === sec){ ps.value = sec; break; }
+    }
+  }
+
+  /* ---------- recipe scaler ---------- */
+  var batch = 1;
+  function renderRecipe(){
+    $("rSugar").textContent = (70*batch) + " g";
+    $("rWater").textContent = (45*batch) + " mL";
+    $("rSalt").textContent = (0.75*batch).toFixed(2).replace(/\.?0+$/,"") + " g, " +
+                             (290*batch) + " mg sodium, " + TSP[batch-1] + " tsp";
+    $("rLemon").textContent = (10*batch) + " mL (~" + LEMON[batch-1] + " lemon)";
+    $("batchCarb").textContent = "~" + (70*batch) + " g carbohydrate, " + batch + " x 150 mL flask" + (batch>1?"s":"");
+  }
+
+  /* ---------- core calculation ---------- */
+  var raceCard = "";
+
+  function calc(){
+    var weight = clamp(num($("weight"), 70), 35, 200);
+    var dist   = clamp(num($("dist"), 0), 0, 100);
+    var temp   = clamp(num($("temp"), 18), 5, 35);
+    var sIdx   = clamp(Math.round(num($("sweat"), 1)), 0, 3);
+    var pSec   = paceSeconds();
+    var sun    = $("sunBtn").getAttribute("aria-pressed") === "true";
+
+    $("tempOut").innerHTML = temp + "&deg;C";
+    $("sweatOut").textContent = SWEAT[sIdx].name + ", " + SWEAT[sIdx].v.toFixed(1) + " L/hr";
+    $("caffOut").textContent = Math.round(weight*3) + " mg";
+
+    each($("tempPills").querySelectorAll(".pill"), function(b){
+      b.setAttribute("aria-pressed", parseInt(b.getAttribute("data-temp"),10) === temp ? "true" : "false");
+    });
+    syncSelects();
+
+    if (dist <= 0 || pSec <= 0){
+      ["oSweat","oSweatRate","oDeficit","oFluid","oFluidRate","oCups","oCarb","oCarbRate","oSodium","oSodiumRate"]
+        .forEach(function(id){ $(id).innerHTML = "&mdash;"; });
+      $("durLine").textContent = "Enter a distance greater than zero.";
+      $("banners").innerHTML = "";
+      $("gelPlan").innerHTML = "";
+      return;
+    }
+
+    var hrs  = dist * pSec / 3600;
+    var mins = hrs * 60;
+    $("durLine").textContent = "Estimated duration: " + fmtTime(hrs) + " at " + paceLabel(pSec) + " /km";
+
+    var tempFactor = Math.max(0.5, 1 + 0.025*(temp - 18));
+    var rate   = SWEAT[sIdx].v * tempFactor * (sun ? 1.15 : 1);
+    var sweatL = rate * hrs;
+    var maxDeficit = weight * 0.02;
+    var need   = Math.max(0, sweatL - maxDeficit);
+    var ceiling = hrs * CEILING_L_HR;
+    var capped = need > ceiling;
+    var recL   = capped ? ceiling : need;
+    var recMl  = recL * 1000;
+    var mlHr   = recMl / hrs;
+    var cups   = recMl / CUP_ML;
+
+    $("oSweat").innerHTML = sweatL.toFixed(2) + ' <span class="u">L</span>';
+    $("oSweatRate").textContent = "adjusted rate " + rate.toFixed(2) + " L/hr";
+    $("oDeficit").innerHTML = maxDeficit.toFixed(2) + ' <span class="u">L</span>';
+    $("oFluid").innerHTML = round50(recMl) + ' <span class="u">mL</span>';
+    $("oFluidRate").textContent = recMl > 0
+      ? "approx " + round50(mlHr) + " mL/hr" + (capped ? " (capped)" : "")
+      : "no planned intake required";
+    $("oCups").innerHTML = (recMl > 0 ? (Math.round(cups*10)/10) : 0) + ' <span class="u">cups</span>';
+
+    var cLo, cHi, cRate;
+    if (mins < 45){
+      cLo = 0; cHi = 0; cRate = "not required at this duration";
+    } else if (mins <= 75){
+      cLo = 15; cHi = 30; cRate = "optional, or mouth rinse only";
+    } else if (mins <= 150){
+      cLo = 30*hrs; cHi = 60*hrs; cRate = "30 to 60 g/hr";
+    } else {
+      cLo = 60*hrs; cHi = 90*hrs; cRate = "60 to 90 g/hr";
+    }
+    var cLoR = Math.round(cLo/5)*5, cHiR = Math.round(cHi/5)*5;
+    $("oCarb").innerHTML = (cHiR === 0 ? "0" : cLoR + "-" + cHiR) + ' <span class="u">g</span>';
+    $("oCarbRate").textContent = cRate;
+
+    var naTxt = "not required at this duration";
+    if (mins >= 90){
+      naTxt = "300 to 600 mg/hr";
+      $("oSodium").innerHTML = (Math.round(300*hrs/50)*50) + "-" + (Math.round(600*hrs/50)*50) + ' <span class="u">mg</span>';
+    } else {
+      $("oSodium").innerHTML = '0 <span class="u">mg</span>';
+    }
+    $("oSodiumRate").textContent = naTxt;
+
+    /* banners */
+    var b = "";
+    if (capped){
+      b += '<div class="banner alert" role="alert"><strong>Absorption ceiling reached</strong>' +
+           'Estimated sweat loss (' + sweatL.toFixed(2) + ' L) exceeds what the gut can realistically absorb over ' +
+           fmtTime(hrs) + '. Intake has been capped at 750 mL/hr. Drinking beyond this rate does not improve hydration, ' +
+           'it pools in the stomach and causes nausea, sloshing and cramping.' +
+           '<p>Plan to finish with a mild body mass deficit. That is the expected and acceptable outcome in these conditions. ' +
+           'Start well hydrated, take sodium with your fluid, and consider easing the pace target in the heat.</p></div>';
+    }
+    if (!capped && need === 0 && mins >= 45){
+      b += '<div class="banner info"><strong>No fixed drinking plan needed</strong>' +
+           'Projected sweat loss sits entirely within the 2% body mass envelope. Drink to thirst. ' +
+           'Sustained intake above your sweat rate, particularly of plain water, is the mechanism behind exercise-associated hyponatraemia.</div>';
+    }
+    if (mins > 150){
+      b += '<div class="banner warn"><strong>Multiple transportable carbohydrates required</strong>' +
+           'Above roughly 60 g/hr, glucose alone saturates intestinal SGLT1 transport. Use a glucose and fructose source ' +
+           '(sucrose works, as does a 2:1 maltodextrin to fructose blend) and build up to this intake in training over 4 to 6 weeks.</div>';
+    }
+    if (temp >= 26){
+      b += '<div class="banner warn"><strong>Heat</strong>' +
+           'At ' + temp + ' degrees, expect a slower pace for the same effort regardless of fluid strategy. ' +
+           'Pre-cooling, shade and a conservative start matter more than the last 200 mL of fluid.</div>';
+    }
+    if (mins > 0 && mins < 45){
+      b += '<div class="banner warn"><strong>Short session</strong>' +
+           'Under 45 minutes there is no meaningful performance benefit to in-run carbohydrate or fluid. Rehydrate afterwards.</div>';
+    }
+    $("banners").innerHTML = b;
+
+    /* gel timing */
+    var doses = 0;
+    if (cHiR === 0){
+      $("gelPlan").innerHTML = '<p class="hint">No in-run fuel needed for this session.</p>';
+    } else {
+      var target = (cLoR + cHiR) / 2;
+      doses = Math.max(1, Math.round(target / THIRD_G));
+      var rows = "";
+      for (var i = 1; i <= doses; i++){
+        var km = Math.round((dist * i / (doses + 1)) * 2) / 2;
+        rows += "<tr><td class='num'>km " + km.toFixed(1) + "</td><td class='num'>" +
+                fmtTime(hrs * (km/dist)) + "</td><td>" + THIRD_G +
+                " g, one third of a flask, about 200 m before the next water point, then chase with plain water</td></tr>";
+      }
+      var flasks = Math.ceil(doses/3);
+      $("gelPlan").innerHTML =
+        "<table><thead><tr><th>Distance</th><th>Approx time</th><th>Action</th></tr></thead><tbody>" + rows +
+        "</tbody></table><p class='hint'>" + doses + " dose" + (doses>1?"s":"") + " x " + THIRD_G + " g = " +
+        (doses*THIRD_G) + " g total, from " + flasks + " flask" + (flasks>1?"s":"") +
+        ". Even spacing is shown, adjust to the actual aid station positions on your course.</p>";
+    }
+
+    raceCard = [
+      "RACE CARD",
+      "Distance: " + dist.toFixed(1) + " km at " + paceLabel(pSec) + " /km",
+      "Projected time: " + fmtTime(hrs),
+      "Conditions: " + temp + " C" + (sun ? ", humid or full sun" : "") + ", " + SWEAT[sIdx].name.toLowerCase() + " sweat rate",
+      "Estimated sweat loss: " + sweatL.toFixed(2) + " L",
+      "Allowable 2% deficit: " + maxDeficit.toFixed(2) + " L",
+      "Fluid: " + round50(recMl) + " mL total, approx " + round50(mlHr) + " mL/hr" + (capped ? " (capped at gut limit)" : ""),
+      "Cups at 90 mL: " + (Math.round(cups*10)/10),
+      "Carbohydrate: " + (cHiR === 0 ? "none" : cLoR + " to " + cHiR + " g, " + cRate),
+      "Gel doses: " + doses + " x " + THIRD_G + " g",
+      "Sodium: " + naTxt,
+      "Caffeine option: " + Math.round(weight*3) + " mg at T-45 to 60 min",
+      "Rule: gel 200 m BEFORE the water point, never after."
+    ].join("\n");
+  }
+
+  /* ---------- event wiring ---------- */
+  $("distSel").addEventListener("change", function(){
+    if (this.value){ $("dist").value = this.value; }
+    calc();
+  });
+  $("paceSel").addEventListener("change", function(){
+    if (this.value){
+      var s = parseInt(this.value, 10);
+      $("paceMin").value = Math.floor(s/60);
+      $("paceSec").value = s % 60;
+    }
+    calc();
+  });
+
+  each($("tempPills").querySelectorAll(".pill"), function(b){
+    b.addEventListener("click", function(){
+      $("temp").value = b.getAttribute("data-temp");
+      calc();
+    });
+  });
+
+  $("sunBtn").addEventListener("click", function(){
+    this.setAttribute("aria-pressed", this.getAttribute("aria-pressed") === "true" ? "false" : "true");
+    calc();
+  });
+
+  each($("batchPills").querySelectorAll(".pill"), function(b){
+    b.addEventListener("click", function(){
+      batch = parseInt(b.getAttribute("data-n"), 10);
+      each($("batchPills").querySelectorAll(".pill"), function(x){
+        x.setAttribute("aria-pressed", x === b ? "true" : "false");
+      });
+      renderRecipe();
+    });
+  });
+
+  ["weight","dist","paceMin","paceSec","temp","sweat"].forEach(function(id){
+    var el = $(id);
+    el.addEventListener("input", calc);
+    el.addEventListener("change", calc);
+    if (el.type === "number"){
+      el.addEventListener("blur", function(){
+        var lo = parseFloat(el.min), hi = parseFloat(el.max);
+        var v = parseFloat(el.value);
+        if (!isFinite(v)) v = lo;
+        el.value = clamp(v, lo, hi);
+        calc();
+      });
+    }
+  });
+
+  $("copyBtn").addEventListener("click", function(){
+    var done = function(ok){
+      $("copyMsg").textContent = ok ? "Copied." : "Copy failed, select the text manually.";
+      window.setTimeout(function(){ $("copyMsg").textContent = ""; }, 2500);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(raceCard).then(function(){ done(true); }, function(){ done(false); });
+    } else {
+      var ta = document.createElement("textarea");
+      ta.value = raceCard;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "absolute";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch(e){ ok = false; }
+      document.body.removeChild(ta);
+      done(ok);
+    }
+  });
+
+  renderRecipe();
+  calc();
+})();
+</script>
+</body>
+</html>
