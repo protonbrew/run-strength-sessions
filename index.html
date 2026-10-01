@@ -8,8 +8,8 @@
 <meta name="theme-color" content="#f4f6f9" media="(prefers-color-scheme: light)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="description" content="Strength exercise guide for Half Marathon Plan v02">
-<title>Strength Sessions — Half Marathon Plan v02</title>
+<meta name="description" content="Strength, core, foot and plyometric sessions for a 12-week half marathon plan (v03)">
+<title>Strength Sessions</title>
 <style>
 :root{
   color-scheme: dark light;
@@ -25,6 +25,7 @@
   --good:#7bd88f;
   --warn:#ffb15c;
   --bad:#ff7a7a;
+  --info:#b79cff;
   --shadow:0 10px 30px rgba(0,0,0,.35);
   --radius:16px;
   --maxw:820px;
@@ -34,7 +35,7 @@
     --bg:#f4f6f9; --bg2:#ffffff; --card:#ffffff; --card2:#f1f4f8;
     --fg:#16202b; --muted:#5d6c7c; --line:#dde4ec;
     --accent:#0a6fb0; --accent-ink:#ffffff;
-    --good:#1f7a45; --warn:#a8600d; --bad:#b4352f;
+    --good:#1f7a45; --warn:#a8600d; --bad:#b4352f; --info:#6a4bc4;
     --shadow:0 8px 24px rgba(20,40,60,.10);
   }
 }
@@ -52,27 +53,21 @@ body{
 button,select,a{font-family:inherit}
 button{cursor:pointer;border:0;background:none;color:inherit}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
+a{color:var(--accent)}
 
-.app{
-  display:flex; flex-direction:column;
-  height:100vh; height:100dvh;
-  position:relative;
-}
+.app{display:flex;flex-direction:column;height:100vh;height:100dvh;position:relative}
 
 /* ---------- HEADER ---------- */
 header.top{
   position:fixed; top:0; left:0; right:0; z-index:30;
-  transform:translate3d(0,0,0);
-  will-change:transform;
+  transform:translate3d(0,0,0); will-change:transform;
   background:linear-gradient(180deg,var(--bg2),var(--bg));
   border-bottom:1px solid var(--line);
   padding:calc(10px + env(safe-area-inset-top)) calc(14px + env(safe-area-inset-right)) 10px calc(14px + env(safe-area-inset-left));
 }
 header.top.settling{transition:transform .2s cubic-bezier(.2,.7,.3,1)}
 header.top.raised{box-shadow:0 8px 20px rgba(0,0,0,.30)}
-@media (prefers-color-scheme: light){
-  header.top.raised{box-shadow:0 8px 18px rgba(20,40,60,.13)}
-}
+@media (prefers-color-scheme: light){ header.top.raised{box-shadow:0 8px 18px rgba(20,40,60,.13)} }
 .top-inner{max-width:var(--maxw);margin:0 auto}
 .brand{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px}
 .brand h1{font-size:1.02rem;margin:0;letter-spacing:.2px}
@@ -80,17 +75,16 @@ header.top.raised{box-shadow:0 8px 20px rgba(0,0,0,.30)}
 
 .tabs{
   display:flex;gap:6px;background:var(--card2);border:1px solid var(--line);
-  padding:4px;border-radius:14px;overflow-x:auto;-webkit-overflow-scrolling:touch;
-  scrollbar-width:none;
+  padding:4px;border-radius:14px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;
 }
 .tabs::-webkit-scrollbar{display:none}
 .tab{
-  flex:1 1 auto;white-space:nowrap;padding:9px 12px;border-radius:11px;
-  font-size:.86rem;font-weight:600;color:var(--muted);text-align:center;
+  flex:1 1 auto;white-space:nowrap;padding:8px 11px;border-radius:11px;
+  font-size:.84rem;font-weight:600;color:var(--muted);text-align:center;
   transition:background .16s,color .16s;
 }
 .tab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);box-shadow:var(--shadow)}
-.tab .tab-sub{display:block;font-size:.68rem;font-weight:500;opacity:.8}
+.tab .tab-sub{display:block;font-size:.66rem;font-weight:500;opacity:.8}
 
 .jump-row{display:flex;gap:8px;align-items:center;margin-top:10px}
 .jump-row label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;flex:0 0 auto}
@@ -110,8 +104,7 @@ select#jump{
 
 /* ---------- MAIN ---------- */
 main{
-  flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;
-  overscroll-behavior-y:contain;
+  flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;
   padding:calc(var(--head-h,168px) + 12px) calc(14px + env(safe-area-inset-right)) 26px calc(14px + env(safe-area-inset-left));
   scroll-padding-top:calc(var(--head-h,168px) + 12px);
 }
@@ -123,14 +116,15 @@ main{
 .card-head{padding:16px 16px 14px;border-bottom:1px solid var(--line);background:var(--card2)}
 .eyebrow{font-size:.7rem;text-transform:uppercase;letter-spacing:.11em;color:var(--accent);font-weight:700}
 .card-head h2{margin:6px 0 12px;font-size:clamp(1.25rem,4.6vw,1.6rem);line-height:1.2;letter-spacing:-.2px}
+.card-head h2 .alias{color:var(--muted);font-weight:600;font-size:.72em;display:block;margin-top:4px}
+.card-head .lede{margin:-4px 0 0;color:var(--muted);font-size:.92rem}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{
-  background:var(--card);border:1px solid var(--line);border-radius:10px;
-  padding:6px 10px;min-width:64px;
-}
+.chip{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 10px;min-width:64px}
 .chip .k{display:block;font-size:.63rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted)}
 .chip .v{display:block;font-size:.95rem;font-weight:700}
 .chip.hero{border-color:color-mix(in srgb,var(--accent) 45%,transparent);background:color-mix(in srgb,var(--accent) 12%,transparent)}
+.chip.flag{border-color:color-mix(in srgb,var(--info) 45%,transparent);background:color-mix(in srgb,var(--info) 12%,transparent)}
+.chip.flag .v{font-size:.82rem}
 
 .card-body{padding:4px 16px 18px}
 section.blk{padding:14px 0;border-bottom:1px solid var(--line)}
@@ -139,24 +133,22 @@ h3.blk-t{
   margin:0 0 8px;font-size:.74rem;text-transform:uppercase;letter-spacing:.1em;
   color:var(--muted);font-weight:700;display:flex;align-items:center;gap:7px;
 }
-h3.blk-t::before{content:"";width:3px;height:13px;background:var(--accent);border-radius:2px}
+h3.blk-t::before{content:"";width:3px;height:13px;background:var(--accent);border-radius:2px;flex:0 0 auto}
 h3.blk-t.warn::before{background:var(--bad)}
 h3.blk-t.good::before{background:var(--good)}
+h3.blk-t.info::before{background:var(--info)}
+h3.blk-t.amber::before{background:var(--warn)}
 .blk p{margin:0 0 8px}
 .blk p:last-child{margin-bottom:0}
 
 ol.steps{margin:0;padding:0;list-style:none;counter-reset:s}
-ol.steps li{
-  counter-increment:s;position:relative;padding:0 0 12px 38px;
-}
+ol.steps li{counter-increment:s;position:relative;padding:0 0 12px 38px}
 ol.steps li:last-child{padding-bottom:0}
 ol.steps li::before{
-  content:counter(s);position:absolute;left:0;top:1px;
-  width:26px;height:26px;border-radius:50%;
-  background:color-mix(in srgb,var(--accent) 16%,transparent);
-  color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);
-  display:flex;align-items:center;justify-content:center;
-  font-size:.78rem;font-weight:800;
+  content:counter(s);position:absolute;left:0;top:1px;width:26px;height:26px;border-radius:50%;
+  background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent);
+  border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);
+  display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:800;
 }
 .sub-t{margin:14px 0 8px;font-size:.9rem;font-weight:700}
 .sub-t:first-child{margin-top:0}
@@ -174,25 +166,41 @@ ul.dots.good li::marker{color:var(--good)}
 .callout:last-child{margin-bottom:0}
 .callout.rule{border-left-color:var(--warn)}
 .callout.feel{border-left-color:var(--good)}
+.callout.evidence{border-left-color:var(--info)}
 .callout h4{margin:0 0 4px;font-size:.85rem;font-weight:800}
 .callout p{margin:0;font-size:.94rem}
+.callout p + p{margin-top:6px}
 strong{font-weight:700}
 
+.fb{display:grid;gap:8px}
+.fb-row{background:var(--card2);border:1px solid var(--line);border-radius:11px;padding:10px 12px}
+.fb-row .if{font-size:.8rem;font-weight:800;color:var(--warn);margin-bottom:3px}
+.fb-row .then{font-size:.93rem}
+
+table.tbl{width:100%;border-collapse:collapse;font-size:.9rem}
+table.tbl th,table.tbl td{text-align:left;vertical-align:top;padding:8px 8px;border-bottom:1px solid var(--line)}
+table.tbl tr:last-child th,table.tbl tr:last-child td{border-bottom:0}
+table.tbl th{font-weight:700;width:38%;color:var(--fg)}
+table.tbl thead th{font-size:.68rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:700}
+.tbl-wrap{border:1px solid var(--line);border-radius:11px;overflow:hidden;background:var(--card2)}
+.tag{display:inline-block;font-size:.66rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:999px;margin-right:6px;vertical-align:1px}
+.tag.hi{background:color-mix(in srgb,var(--good) 20%,transparent);color:var(--good)}
+.tag.mid{background:color-mix(in srgb,var(--warn) 20%,transparent);color:var(--warn)}
+.tag.lo{background:color-mix(in srgb,var(--bad) 18%,transparent);color:var(--bad)}
+
+ul.refs{margin:0;padding-left:18px;font-size:.88rem}
+ul.refs li{margin-bottom:8px}
+ul.refs .note{display:block;color:var(--muted);font-size:.82rem}
+
 /* ---------- TIMER ---------- */
-.timer{
-  margin:14px 0 0;border:1px solid var(--line);border-radius:14px;
-  background:var(--card2);overflow:hidden;
-}
+.timer{margin:14px 0 0;border:1px solid var(--line);border-radius:14px;background:var(--card2);overflow:hidden}
 .timer.timed{border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
-.t-head{
-  display:flex;align-items:center;justify-content:space-between;gap:10px;
-  padding:11px 13px;width:100%;
-}
+.t-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 13px;width:100%}
 .t-head .lbl{display:flex;align-items:center;gap:8px;font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.09em}
 .badge{
   font-size:.62rem;letter-spacing:.06em;padding:3px 7px;border-radius:999px;
-  background:color-mix(in srgb,var(--accent) 18%,transparent);
-  color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 38%,transparent);
+  background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--accent);
+  border:1px solid color-mix(in srgb,var(--accent) 38%,transparent);
 }
 .t-head .caret{color:var(--muted);font-size:.78rem;font-weight:700}
 .t-body{padding:0 13px 14px;display:block}
@@ -206,19 +214,13 @@ strong{font-weight:700}
 .t-display.done{color:var(--good)}
 .t-round{font-size:.8rem;color:var(--muted);min-height:1.2em}
 .t-bar{height:6px;background:var(--card);border-radius:99px;overflow:hidden;margin:9px 0 12px;border:1px solid var(--line)}
-.t-bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .18s linear}
+.t-bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s linear}
 .t-bar i.rest{background:var(--warn)}
 .t-presets{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
-.preset{
-  font-size:.78rem;font-weight:600;padding:7px 11px;border-radius:999px;
-  border:1px solid var(--line);background:var(--card);color:var(--muted);
-}
+.preset{font-size:.78rem;font-weight:600;padding:7px 11px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--muted)}
 .preset[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .t-controls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.t-controls button{
-  padding:12px 8px;border-radius:11px;font-weight:800;font-size:.9rem;
-  border:1px solid var(--line);background:var(--card);min-height:46px;
-}
+.t-controls button{padding:12px 8px;border-radius:11px;font-weight:800;font-size:.9rem;border:1px solid var(--line);background:var(--card);min-height:46px}
 .t-controls button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .t-controls button:disabled{opacity:.42;cursor:default}
 
@@ -226,32 +228,27 @@ strong{font-weight:700}
 footer.bottom{
   flex:0 0 auto;
   background:color-mix(in srgb,var(--bg2) 92%,transparent);
-  backdrop-filter:saturate(160%) blur(12px);
-  -webkit-backdrop-filter:saturate(160%) blur(12px);
+  backdrop-filter:saturate(160%) blur(12px);-webkit-backdrop-filter:saturate(160%) blur(12px);
   border-top:1px solid var(--line);
   padding:9px calc(12px + env(safe-area-inset-right)) calc(9px + env(safe-area-inset-bottom)) calc(12px + env(safe-area-inset-left));
 }
 .bottom-inner{max-width:var(--maxw);margin:0 auto;display:flex;flex-direction:column;gap:8px}
 .video-row{display:flex;gap:8px}
+.video-row.hide{display:none}
 .btn-video{
-  flex:1 1 auto;display:flex;align-items:center;justify-content:center;gap:8px;
-  text-decoration:none;color:var(--fg);
-  background:var(--card2);border:1px solid var(--line);
-  border-radius:12px;padding:11px;font-size:.88rem;font-weight:700;min-height:46px;
+  flex:1 1 auto;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;color:var(--fg);
+  background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:11px;font-size:.88rem;font-weight:700;min-height:46px;
 }
 .btn-video:active{background:var(--card)}
 .btn-video .play{color:var(--bad);font-size:1.05rem;line-height:1}
 .btn-alt{
-  flex:0 0 auto;display:flex;align-items:center;justify-content:center;
-  text-decoration:none;color:var(--muted);background:var(--card2);
-  border:1px solid var(--line);border-radius:12px;padding:11px 13px;
-  font-size:.78rem;font-weight:700;min-height:46px;
+  flex:0 0 auto;display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--muted);
+  background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:11px 13px;font-size:.78rem;font-weight:700;min-height:46px;
 }
 .nav-row{display:flex;align-items:center;gap:8px}
 .nav-btn{
   flex:1 1 0;min-height:52px;border-radius:13px;font-size:.95rem;font-weight:800;
-  background:var(--card2);border:1px solid var(--line);
-  display:flex;align-items:center;justify-content:center;gap:6px;
+  background:var(--card2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;gap:6px;
 }
 .nav-btn.next{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .nav-btn:disabled{opacity:.35;cursor:default}
@@ -276,7 +273,6 @@ footer.bottom{
 .kbd-hint{display:none;font-size:.68rem;color:var(--muted);text-align:center;margin-top:2px}
 @media (hover:hover) and (pointer:fine){.kbd-hint{display:block}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style>
 </head>
 <body>
@@ -286,24 +282,24 @@ footer.bottom{
     <div class="top-inner">
       <div class="brand">
         <h1>Strength Sessions</h1>
-        <span class="sub">Half Marathon Plan v02</span>
+        <span class="sub">Half marathon plan v03</span>
       </div>
       <div class="tabs" id="tabs" role="tablist" aria-label="Training session"></div>
       <div class="jump-row">
         <label for="jump">Jump to</label>
-        <select id="jump" aria-label="Jump to exercise"></select>
+        <select id="jump" aria-label="Jump to card"></select>
       </div>
       <p class="session-note hide" id="sessionNote"></p>
     </div>
   </header>
 
   <main id="main" tabindex="-1">
-    <article class="card" id="card" aria-live="polite"></article>
+    <article class="card" id="card"></article>
   </main>
 
   <footer class="bottom">
     <div class="bottom-inner">
-      <div class="video-row">
+      <div class="video-row" id="videoRow">
         <a class="btn-video" id="videoBtn" href="#" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">
           <span class="play">&#9654;</span><span>Watch Video Demo</span>
         </a>
@@ -326,49 +322,97 @@ footer.bottom{
 "use strict";
 
 /* =========================================================
-   DATA — exercises stored once, sessions reference them by id
+   HELPERS FOR TIMER PRESETS
    ========================================================= */
+
+function buildIntervals(rounds, work, rest, wLabel, rLabel){
+  const out = [];
+  for (let i=1;i<=rounds;i++){
+    out.push({label:`${wLabel} ${i} of ${rounds}`, s:work});
+    if (i<rounds) out.push({label:`${rLabel}`, s:rest, rest:true});
+  }
+  return out;
+}
+function buildSides(rounds, hold, swap, rest){
+  const out = [];
+  for (let i=1;i<=rounds;i++){
+    out.push({label:`Set ${i}: side 1`, s:hold});
+    out.push({label:"Switch sides", s:swap, rest:true});
+    out.push({label:`Set ${i}: side 2`, s:hold});
+    if (i<rounds) out.push({label:"Rest", s:rest, rest:true});
+  }
+  return out;
+}
+
+/* =========================================================
+   EXERCISE AND INFO CARDS (stored once, sessions reference by id)
+   ========================================================= */
+
+const KNEE_HIP_FLAG = {k:"Evidence", v:"Knee & hip"};
 
 const EX = {
 
-/* ------------------------ MONDAY, SESSION A ------------------------ */
+/* ======================= TUESDAY: STRENGTH A ======================= */
 
 "standing-calf": {
   name: "Standing Calf Raise, Straight Knee",
-  video: "standing calf raise straight knee eccentric form",
+  video: "standing calf raise straight knee slow eccentric",
   chips: [ {k:"Sets",v:"4",hero:true}, {k:"Reps",v:"8–10",hero:true}, {k:"Tempo",v:"3 s lower"} ],
-  setup: "Stand on the edge of a step or stair with the balls of your feet on the edge and your heels hanging off. Hold a wall or railing for balance. If you have a dumbbell, hold it in one hand. Start with bodyweight until the movement feels natural.",
+  dose: [
+    ["Weeks 1–4","3 x 10, bodyweight"],
+    ["Weeks 5–8","4 x 8–10, loaded"],
+    ["Weeks 9–11","4 x 8, heavier"]
+  ],
+  setup: "Stand on the edge of a step with the balls of your feet on the edge and your heels hanging off. Hold a wall or railing for balance. Start with bodyweight until the movement feels natural.",
   stepGroups: [{ title:"The movement", steps:[
     "Start with your heels dropped below the step. You should feel a gentle stretch in your calves.",
     "Push up onto your toes as high as you can. Pause for one second at the top.",
-    "Lower slowly, counting \"one-thousand, two-thousand, three-thousand\" on the way down. This slow lowering is the whole point of the exercise. Don't rush it.",
+    "Lower slowly, counting \"one-thousand, two-thousand, three-thousand\" on the way down. This slow lowering is the point of the exercise. Don't rush it.",
     "Let your heels drop just below the step. That's one rep."
   ]}],
-  feel: "The big calf muscle (gastrocnemius) doing the work. Both calves should be burning evenly by rep 7 or 8. You should feel the stretch at the bottom and a hard squeeze at the top.",
-  cues: [ {t:"Keep your knees straight", b:"Throughout. Not locked rigid, but straight. If your knees bend, you shift the load off the gastrocnemius and onto the soleus (that's the next exercise)."} ],
+  feel: "The big calf muscle (gastrocnemius) doing most of the work, with the soleus underneath still contributing. Both calves should be burning evenly by rep 7 or 8, with a stretch at the bottom and a hard squeeze at the top.",
+  cues: [
+    {t:"Keep your knees straight", b:"Not locked rigid, but straight. Bending the knees shifts load away from the gastrocnemius and onto the soleus (that's the next exercise)."},
+    {t:"Dose check: why it has to be heavy", b:"In a meta-analysis of tendon training studies, high loads (above about 70% of maximum) drove tendon adaptation while lower loads did almost nothing, and programmes of 12 weeks or more worked best (Bohm 2015). 4 x 8 to 10 with a slow lower is an appropriate strength dose (ACSM 2009), but only if the load is heavy. Once two-legged bodyweight raises are easy, go single-leg and add weight.", kind:"evidence"}
+  ],
+  load: [
+    "Pick a load where the last rep of each set leaves about 1 to 3 reps in reserve, with a clean 3-second lower.",
+    "Progression: two legs, bodyweight → one leg, bodyweight (roughly doubles the load per leg) → one leg holding a dumbbell on the working side.",
+    "Add load when every set reaches 10 reps with 2 or more reps still in reserve."
+  ],
   mistakes: [{ items:[
     "Bouncing at the bottom instead of pausing. This uses elastic recoil and bypasses the muscle.",
     "Rushing the lowering phase. If you aren't counting three seconds, you're going too fast.",
     "Leaning forward. Stay upright with your weight directly over the balls of your feet.",
-    "Going too heavy too soon. You want to complete 8 reps with good form and a 3-second lower. If you can't, drop the weight."
+    "Going too heavy too soon. You want 8 reps with good form and a 3-second lower. If you can't, drop the weight."
   ]}],
   timer: null
 },
 
 "seated-calf": {
   name: "Seated Calf Raise, Bent Knee",
-  video: "seated calf raise bent knee soleus home form",
+  video: "seated calf raise bent knee soleus",
   chips: [ {k:"Sets",v:"3",hero:true}, {k:"Reps",v:"12–15",hero:true}, {k:"Tempo",v:"2 s lower"} ],
-  setup: "Sit on a chair or bench with your feet flat on the floor, knees bent at about 90 degrees. Place a weight across your knees (a dumbbell resting on a folded towel works). Put the balls of your feet on a thick book or low platform so your heels can drop below the surface.",
+  dose: [
+    ["Weeks 1–4","3 x 12"],
+    ["Weeks 5–8","3 x 12–15, loaded"],
+    ["Weeks 9–11","3 x 12, loaded"]
+  ],
+  setup: "Sit on a chair or bench with your knees bent at about 90 degrees. Put the balls of your feet on a thick book or low platform so your heels can drop below it. Place a weight across your knees (a dumbbell on a folded towel works).",
   stepGroups: [{ title:"The movement", steps:[
     "Press through the balls of your feet and lift your heels as high as you can.",
     "Pause briefly at the top.",
-    "Lower slowly (2 seconds) back to the start."
+    "Lower slowly (2 seconds) until the heels drop below the platform."
   ]}],
-  feel: "A burn deeper and lower in the calf than the standing version. This is the soleus, the muscle underneath the gastrocnemius. It sits closer to the Achilles tendon. You won't feel it as dramatically as the standing raise but it should be fatiguing by rep 12.",
-  cues: [ {t:"Why it matters", b:"The soleus is the single hardest-working muscle during running. It produces more force than any other muscle at every stride. Training it bent-knee isolates it specifically because bending the knee slackens the gastrocnemius and forces the soleus to do the work alone."} ],
+  feel: "A burn deeper and lower in the calf than the standing version. This is the soleus, which sits under the gastrocnemius and closer to the Achilles. It should be fatiguing by rep 12.",
+  cues: [ {t:"Why it matters", b:"In a musculoskeletal modelling study across running speeds, the soleus and gastrocnemius were the main contributors to vertical support up to about 7 m/s, which covers every distance-running pace (Dorn 2012). Bending the knee slackens the gastrocnemius, so the soleus takes a larger share of the load.", kind:"evidence"} ],
+  load: [
+    "The soleus is strong, so a single dumbbell on the knees is often too light to make 12 to 15 reps hard.",
+    "Options: do one leg at a time with the weight on that knee, stack a loaded backpack on the knees, or use a seated calf or Smith machine if you have access.",
+    "Same rule as the standing raise: finish each set with 1 to 3 reps in reserve. 3 x 12 to 15 is an appropriate dose only if rep 12 to 15 is genuinely hard."
+  ],
   mistakes: [{ items:[
-    "Skipping this because the standing version \"already did calves.\" They target different muscles.",
+    "Skipping this because the standing version \"already did calves.\" They load the two muscles differently.",
     "No platform under the feet, so the heel never drops below the toes. You lose the bottom-range loading.",
     "Rocking the torso to generate momentum."
   ]}],
@@ -377,276 +421,556 @@ const EX = {
 
 "split-squat": {
   name: "Rear-Foot Elevated Split Squat",
-  alias: "Bulgarian Split Squat",
-  video: "bulgarian split squat proper form tutorial",
-  chips: [ {k:"Sets",v:"3",hero:true}, {k:"Reps",v:"8 / leg",hero:true} ],
-  setup: "Stand about 60 to 70 cm in front of a couch, chair, or bench. Reach one foot back and rest the top of that foot on the surface behind you. Your front foot is flat on the ground, pointing straight ahead. Most of your weight should be on the front leg.",
+  alias: "Bulgarian split squat",
+  video: "bulgarian split squat form",
+  chips: [ {k:"Sets",v:"3",hero:true}, {k:"Reps",v:"8 / leg",hero:true}, {k:"Tempo",v:"2–3 s lower"}, KNEE_HIP_FLAG ],
+  dose: [
+    ["Weeks 1–4","3 x 8, bodyweight"],
+    ["Weeks 5–8","3 x 8, loaded"],
+    ["Weeks 9–11","3 x 8, loaded (hold the load, don't chase increases)"]
+  ],
+  setup: "Stand about 60 to 70 cm in front of a bench or couch, roughly knee height or a bit lower. Rest the top of one foot on it behind you. Keep your feet on separate tracks, about hip-width apart, not one directly behind the other. Most of your weight is on the front leg.",
   stepGroups: [{ title:"The movement", steps:[
-    "Bend your front knee and lower your body straight down. Think of dropping your back knee toward the floor, not pushing your front knee forward.",
-    "Go down until your front thigh is roughly parallel to the ground, or as deep as you can with good balance.",
-    "Push back up through your front heel."
+    "Brace lightly (exhale, ribs down). Let the torso tip slightly forward from the hips, with your weight over the middle of the front foot.",
+    "Lower over 2 to 3 seconds by dropping the back knee toward the floor, rather than pushing the front knee forward.",
+    "Go down until the front thigh is about parallel to the floor, or the back knee is a few centimetres off it.",
+    "Drive the floor away through the whole front foot (heel and big toe). Hip and knee straighten together.",
+    "Finish with the front hip fully open (glute squeezed) and the front knee nearly straight. Then start the next rep."
   ]}],
-  feel: "Your front-leg quad (front of thigh) and glute (backside) doing most of the work. Some stretch in the hip flexor of the back leg. This is a single-leg strength exercise, so expect one side to feel harder than the other.",
-  cues: [ {t:"Keep your torso upright", b:"A slight forward lean is fine, but don't fold at the waist."} ],
+  feel: "Front-leg quad and glute doing most of the work, with a stretch in the hip flexor of the back leg. Expect one side to feel harder than the other.",
+  cues: [
+    {t:"How high to come up", b:"Stand until the front knee is nearly straight and the front hip is fully extended. There's no need to snap or lock the knee: the top is the easiest part of the lift and locking out just rests the muscles. The hardest and most useful range is the bottom half, so prioritise depth over the last few degrees at the top. This is coaching convention; no trial has compared top positions for runners."},
+    {t:"Torso angle is your main dial", b:"A more upright torso biases the quad. A forward lean from the hips (back flat, chest over the front thigh) biases the glute and hamstrings. Both are fine for runners. Pick one and keep it consistent within a set."}
+  ],
+  feedback: [
+    {i:"I don't feel my glute at all", t:"Lean further forward from the hips (up to roughly 30 to 40 degrees, back flat), take a slightly longer stance, go a little deeper, and push the hips forward as you stand. Forward trunk lean increased glute max and hamstring activity in an EMG study of this exercise (Aygun-Polat 2025), and longer step length increased glute max activity in a split squat study (Frontiers 2023)."},
+    {i:"It's all quad, or the front of my knee aches", t:"Use the same changes as above to shift work toward the hip. If knee discomfort goes above 3/10, reduce depth for now rather than stopping the exercise."},
+    {i:"The back leg is doing the work or cramps", t:"Lower the rear support, or move the front foot a little further forward. The back leg should feel stretched, not worked."},
+    {i:"My lower back is working", t:"You are probably arching to stay upright. Brace first, and get any lean by hinging at the hips rather than bending the spine."},
+    {i:"I'm wobbling", t:"Widen the tracks (feet further apart side to side). Lightly hold a rail with one hand and carry the weight in the other."},
+    {i:"I feel my inner thigh near the bottom", t:"That's normal. The adductor magnus helps extend the hip from deep flexion."},
+    {i:"A general caveat", t:"Muscle 'feel' is only a rough guide. Not feeling a muscle doesn't mean it isn't working, and strength gains come from load and effort, not sensation. Use feel to find a position you can repeat."}
+  ],
+  load: [
+    "Stay at bodyweight until 3 x 8 per leg is steady and balanced.",
+    "First choice: a dumbbell in each hand at your sides. Easiest to balance, loads hip and knee.",
+    "Alternatives: one dumbbell held at the chest (goblet), which keeps you more upright and quad-biased; or one dumbbell in the hand opposite the front leg, which adds a hip-stability challenge. A barbell or Smith machine suits heavier loads.",
+    "How heavy: choose a load where rep 8 leaves about 1 to 3 reps in reserve on every set. That is roughly 70 to 80% of your maximum, close to the 'high load' category (80% or more) that a 2024 meta-analysis found improves running economy (Llanos-Lagos 2024).",
+    "When to increase: once all 3 sets of 8 feel like 3 or more reps in reserve, add the smallest step available, usually 1 to 2 kg per hand.",
+    "From the peak weeks onward, hold the load steady. The goal then is to keep strength, not build it."
+  ],
   mistakes: [{ items:[
-    "Standing too close to the bench. Your front knee ends up way past your toes and the knee joint takes excessive load. Step further forward.",
-    "Standing too far from the bench. You end up in an awkward lunge and can't get depth. Adjust until the bottom position feels stable.",
-    "Letting the front knee collapse inward. Consciously push it outward so it tracks over your second or third toe.",
-    "Gripping the back foot. The back leg is just a kickstand for balance. If you're pushing off the back foot, you're cheating the front leg.",
+    "Standing too close to the bench: the front heel wants to lift and the lift becomes almost all knee. Step further forward.",
+    "Standing too far away: you end up in an awkward lunge and can't get depth. Adjust until the bottom position feels stable.",
+    "Letting the front knee collapse inward. Keep it tracking over your second or third toe.",
+    "Pushing off the back foot. The back leg is a kickstand for balance only.",
     "Adding weight before the balance is sorted. Get 3 x 8 confidently with bodyweight first."
   ]}],
+  evidence: "Combined hip- and knee-targeted strengthening is the recommended exercise approach for front-of-knee (patellofemoral) pain in the 2019 JOSPT clinical practice guideline (Willy 2019). This exercise trains both.",
   timer: null
 },
 
 "sl-rdl": {
   name: "Single-Leg Romanian Deadlift",
-  video: "single leg romanian deadlift form tutorial",
-  chips: [ {k:"Sets",v:"3",hero:true}, {k:"Reps",v:"8 / leg",hero:true} ],
-  setup: "Stand on one leg with a slight bend in that knee. Hold a dumbbell or kettlebell in the opposite hand (left leg standing, right hand holds the weight). If you have nothing, do it with bodyweight. Stand next to a wall if balance is a problem at first.",
+  video: "single leg romanian deadlift form",
+  chips: [ {k:"Sets",v:"3",hero:true}, {k:"Reps",v:"8 / leg",hero:true}, {k:"Tempo",v:"2–3 s lower"}, KNEE_HIP_FLAG ],
+  dose: [
+    ["Weeks 1–4","3 x 8, bodyweight"],
+    ["Weeks 5–8","3 x 8, loaded"],
+    ["Weeks 9–11","3 x 8, loaded"]
+  ],
+  setup: "Stand on one leg with a soft bend in that knee. Hold a dumbbell or kettlebell in the opposite hand (left leg standing, right hand holds the weight). Stand next to a wall if balance is a problem at first.",
   stepGroups: [{ title:"The movement", steps:[
-    "Hinge forward at the hip, letting your free leg drift straight back behind you as a counterbalance. Imagine your body is a seesaw pivoting at the hip.",
-    "Keep lowering the weight toward the ground until you feel a strong stretch in the hamstring of the standing leg. For most people this is when the torso is roughly parallel to the floor.",
-    "Squeeze your glute and hamstring to stand back up."
+    "Set a soft knee (a small bend, about 15 to 20 degrees) and keep that angle fixed for the whole rep.",
+    "Brace: exhale, ribs down, long spine from head to tailbone.",
+    "Push your hips back as the torso tips forward. The free leg rises behind you, and torso and free leg move together as one straight line.",
+    "Lower over 2 to 3 seconds until you feel a strong hamstring stretch, or just before your lower back starts to round or your pelvis starts to tuck. For many people that's around torso parallel to the floor; for some it's higher.",
+    "Drive the standing hip forward to stand up, squeezing the glute. Finish tall with the pelvis level."
   ]}],
-  feel: "A deep stretch and then a contraction in the back of your standing-leg thigh (hamstring) and your glute. Your lower back should feel like it's working to stay flat, but it should not hurt.",
-  cues: [ {t:"The standing knee stays slightly bent", b:"The entire time. Do not lock it out, and do not let it bend further as you hinge."} ],
+  feel: "A deep stretch and then a contraction in the hamstring and glute of the standing leg. Your back muscles work to hold position, which is expected, but they shouldn't be the main thing you feel and it should never hurt.",
+  cues: [
+    {t:"Where the movement happens", b:"Picture a hinge pin through the standing hip joint. All the motion is hip flexion on the way down and hip extension on the way up. Your spine is a rigid plank that moves with the pelvis, not on it: no rounding, no extra arching, no twisting. The standing knee angle doesn't change. The pelvis stays square to the floor, as if both hip bones were headlights pointing down."},
+    {t:"Keep the weight close", b:"Let the weight travel down close to the standing shin. The further it drifts from your body, the longer the lever on your lower back."}
+  ],
+  feedback: [
+    {i:"My lower back is doing most of the work", t:"Usually the hips aren't moving back, so the spine bends instead. Fix in this order: (1) shorten the range and stop at a strong hamstring stretch; (2) push the hips back as if shutting a car door behind you; (3) keep the weight close to the shin; (4) brace before each rep; (5) drop the load, or regress to a kickstand RDL (back toes resting lightly on the floor) until the pattern is clean. Some back-muscle effort is normal because the spinal extensors hold the spine still; effort is fine, pain is not."},
+    {i:"I don't feel my hamstring", t:"The standing knee is probably bending more as you go down, turning it into a squat. Keep the knee angle fixed and push the hips further back."},
+    {i:"I don't feel my glute", t:"Finish every rep by driving the hip fully forward and squeezing. Hold the weight in the opposite hand: contralateral loading increased glute medius and upper glute max activity compared with same-side loading in an EMG study (Mo 2023)."},
+    {i:"My hips twist open", t:"Point the toes of the free leg at the floor and keep both hip bones facing down. The free leg drifting out to the side is the tell."},
+    {i:"I can't balance", t:"Lightly touch a wall with the free hand. The aim is hamstring and glute loading, not a balance test."}
+  ],
+  load: [
+    "Start with bodyweight, then a dumbbell or kettlebell in the opposite hand, then a dumbbell in each hand for heavier work.",
+    "Same rule as the split squat: finish each set with 1 to 3 reps in reserve, and add the smallest step when all sets feel like 3 or more in reserve.",
+    "Grip often gives out before the hamstrings. If it does, hold one heavier weight with both hands."
+  ],
   mistakes: [{ items:[
-    "Rounding the lower back. This is the most important one. Your back should stay flat from your head to your tailbone throughout the entire movement. If your back rounds, you've gone too deep. Come back up 5 cm.",
-    "Rotating the hips. Your hips should stay square to the ground, like you have headlights on the front of both hip bones and they're both pointing at the floor. The free leg going out to the side is a sign of hip rotation.",
+    "Rounding the lower back. The most important one. If your back rounds, you've gone too deep; come back up 5 cm.",
+    "Rotating the hips open (free leg drifts to the side).",
     "Bending the standing knee more as you hinge. The knee angle stays fixed.",
-    "Looking up. Keep your neck neutral, eyes on a spot about 2 metres ahead of you on the floor.",
-    "Wobbling excessively and treating it as a balance exercise. If you can't do it without grabbing something, stand next to a wall and lightly touch it. The goal is hamstring and glute loading, not balance practice."
+    "Looking up. Keep the neck neutral, eyes on a spot about 2 metres ahead on the floor.",
+    "Treating it as a balance exercise. Touch a wall if you need to."
   ]}],
+  evidence: "Hip extensor strengthening is part of the hip-targeted exercise recommended alongside knee exercise for patellofemoral pain (Willy 2019).",
   timer: null
 },
 
 "copenhagen": {
   name: "Copenhagen Plank",
-  video: "copenhagen plank adductor exercise form",
-  chips: [ {k:"Sets",v:"3",hero:true}, {k:"Hold",v:"20–30 s",hero:true}, {k:"Per",v:"Side"} ],
-  setup: "Lie on your side next to a bench, couch, or sturdy chair. Place the inside of your top leg's knee or lower shin on the surface. Your bottom leg hangs free underneath. Prop yourself up on your bottom elbow, directly under your shoulder.",
+  video: "copenhagen plank adductor short lever long lever",
+  chips: [ {k:"Sets",v:"3",hero:true}, {k:"Hold",v:"20–30 s",hero:true}, {k:"Per",v:"Side"}, KNEE_HIP_FLAG ],
+  dose: [
+    ["Weeks 1–4","3 x 20 s, short lever (knee on bench)"],
+    ["Weeks 5–8","3 x 25 s"],
+    ["Weeks 9–11","3 x 30 s, long lever (ankle on bench)"]
+  ],
+  setup: "Lie on your side next to a bench, couch or sturdy chair, propped on your bottom elbow directly under your shoulder. Rest your top leg on the bench. Short lever (easier): the inside of the top knee is on the bench. Long lever (harder): the inside of the top ankle or lower shin is on the bench. Your bottom leg hangs free underneath.",
   stepGroups: [{ title:"The movement", steps:[
-    "Lift your hips off the ground by squeezing the inner thigh of your top leg into the bench.",
-    "Your body should form a straight line from your top-leg knee to your shoulder.",
-    "Hold this position. Breathe normally. Don't hold your breath.",
+    "Lift your hips off the ground by squeezing the inner thigh of your top leg down into the bench.",
+    "Make a straight line from the top leg to your shoulder.",
+    "Hold. Breathe normally.",
     "Lower down. Switch sides."
   ]}],
-  feel: "Your inner thigh (adductor) of the top leg working hard. This is the muscle group that refers pain to the groin and is a common running injury site.",
-  cues: [ {t:"Regression if it's too hard", b:"Instead of placing the bench contact point at your knee, use your ankle or mid-shin (this shortens the lever and makes it easier). Or start with your bottom knee on the ground as well, so you're only lifting a short segment of your body.", kind:"rule"} ],
+  feel: "The inner thigh (adductors) of the top leg working hard.",
+  cues: [ {t:"Regression if it's too hard", b:"Use the short lever (knee on the bench) and let the bottom knee rest lightly on the floor so it can help. Move to the long lever (ankle on the bench) only when 3 x 30 s on the short lever is solid.", kind:"rule"} ],
   mistakes: [{ items:[
-    "Letting the hips sag or pike upward. Straight line from knee to shoulder.",
-    "Holding the bench contact at the ankle from day one. Start at the knee (easier) and progress to the ankle (harder) over weeks.",
-    "Holding your breath. Breathe.",
-    "Placing the supporting elbow too far forward or back. It goes directly under the shoulder joint."
+    "Letting the hips sag or pike upward. Straight line from top leg to shoulder.",
+    "Starting on the long lever (ankle on the bench) on day one. Start at the knee and progress to the ankle over weeks.",
+    "Holding your breath.",
+    "Placing the supporting elbow too far forward or back. It goes directly under the shoulder."
   ]}],
+  evidence: "In a cluster-randomised trial of 652 semi-professional footballers, a programme built on the Copenhagen adduction exercise lowered the risk of groin problems by 41% (OR 0.59) (Harøy 2019). Football involves far more kicking and cutting than running, so treat the transfer to runners as plausible rather than proven. Dose check: the trial programme used a single set per side, building to about 12 to 15 reps, 2 to 3 times a week in pre-season and once a week in season. Your 3 holds per side once a week is a similar weekly amount of work, so no change is needed.",
   timer: {
     presets: [
       {label:"20 s hold", phases:[{label:"Hold",s:20}]},
       {label:"25 s hold", phases:[{label:"Hold",s:25}]},
       {label:"30 s hold", phases:[{label:"Hold",s:30}], default:true},
-      {label:"30 s × both sides", phases:[{label:"Hold — side 1",s:30},{label:"Switch sides",s:15,rest:true},{label:"Hold — side 2",s:30}]}
+      {label:"30 s × both sides", phases:[{label:"Hold: side 1",s:30},{label:"Switch sides",s:15,rest:true},{label:"Hold: side 2",s:30}]},
+      {label:"Full: 3 sets × both sides", phases: buildSides(3,30,15,60)}
     ]
   }
 },
 
-/* ------------------------ WEDNESDAY, SESSION B ------------------------ */
-
-"pogo": {
-  name: "Pogo Hops",
-  video: "pogo hops running plyometric drill technique",
-  chips: [ {k:"Sets",v:"3",hero:true}, {k:"Contacts",v:"20",hero:true}, {k:"Count",v:"Each landing = 1"} ],
-  setup: "Stand on a firm, flat surface in your running shoes. Feet hip-width apart.",
-  stepGroups: [{ title:"The movement", steps:[
-    "Bounce on the balls of your feet with stiff ankles, as if you're skipping rope without the rope.",
-    "Keep your knees almost straight. The bounce comes from your ankles and feet, not from bending your knees.",
-    "Think \"spring,\" not \"jump.\" Spend as little time on the ground as possible.",
-    "Arms can be relaxed at your sides or lightly swinging."
-  ]}],
-  feel: "A quick, elastic loading through your Achilles and calf. This should feel bouncy and light, not heavy or effortful. If it feels like hard work, you're jumping too high.",
-  cues: [],
-  mistakes: [{ items:[
-    "Bending the knees deeply and turning it into squat jumps. Knees stay nearly straight.",
-    "Jumping too high. Aim for 2 to 5 cm off the ground.",
-    "Landing on the heels. Stay on the balls of your feet throughout.",
-    "Doing these when your Achilles is sore. If the Monday calf soreness is still present, skip pogo hops entirely."
-  ]}],
-  timer: null
-},
-
-"a-skips": {
-  name: "A-Skips",
-  video: "A skip running drill technique tutorial",
-  chips: [ {k:"Sets",v:"3",hero:true}, {k:"Distance",v:"20 m",hero:true} ],
-  setup: "Find a flat stretch of ground, about 20 metres long. A hallway, driveway, or footpath works.",
-  stepGroups: [{ title:"The movement", steps:[
-    "Skip forward, driving one knee up to roughly hip height with each skip.",
-    "The rhythm is \"skip-drive, skip-drive.\" There's a small hop on the support leg as the other knee drives up.",
-    "Land on the ball of your foot each time.",
-    "Opposite arm swings forward with each knee drive, just like running."
-  ]}],
-  feel: "A rhythmic, bouncy, exaggerated running motion. Your hip flexors (front of the hip) do the knee drive; your calves and feet handle the bounce.",
-  cues: [],
-  mistakes: [{ items:[
-    "Turning it into high knees without the skip. The skip (small hop) is the reactive component.",
-    "Leaning back. Stay tall, slight forward lean.",
-    "Going too fast. This is a drill, not a sprint. Controlled rhythm.",
-    "Stiff arms. Let them swing naturally."
-  ]}],
-  timer: null
-},
+/* ======================= WEDNESDAY: CORE AND FOOT ======================= */
 
 "band-walk": {
   name: "Banded Lateral Walk",
-  video: "banded lateral walk glute medius exercise form",
-  chips: [ {k:"Sets",v:"2",hero:true}, {k:"Steps",v:"15",hero:true}, {k:"Per",v:"Direction"} ],
-  setup: "Place a resistance band (loop style) around both legs just above the knees. If you don't have a band, you can do this without one initially but the exercise is much less effective. Stand with feet hip-width apart, slight bend in knees and hips (a quarter-squat position).",
+  video: "banded lateral walk band at ankles",
+  chips: [ {k:"Sets",v:"2–3",hero:true}, {k:"Steps",v:"15",hero:true}, {k:"Per",v:"Direction"}, KNEE_HIP_FLAG ],
+  dose: [
+    ["Weeks 1–4","2 x 15 each way, band above the knees"],
+    ["Weeks 5–8","2–3 x 15 each way, band at the ankles"],
+    ["Weeks 9–11","3 x 15 each way, band around the forefoot"]
+  ],
+  setup: "Loop a resistance band around both legs. Just above the knees is easiest; around the ankles is harder; around the forefoot is hardest. Stand with feet hip-width apart in a quarter squat.",
   stepGroups: [{ title:"The movement", steps:[
     "Step sideways with one foot, pushing against the band.",
-    "Follow with the other foot, returning to hip-width apart. Don't let your feet clap together.",
-    "Stay low in the quarter-squat position throughout. Don't bob up and down.",
-    "Take 15 steps one direction, then 15 back."
+    "Follow with the other foot back to hip-width. Don't let the feet come together.",
+    "Stay low in the quarter squat throughout. Don't bob up and down.",
+    "Take 15 steps one way, then 15 back. Rest about 30 to 60 s between sets."
   ]}],
-  feel: "A burn on the outside of both hips (gluteus medius). The stepping leg works to push out; the stance leg works to resist being pulled in.",
-  cues: [ {t:"Why it matters", b:"Weak hip abductors are associated with the knee collapsing inward during running (the same pattern that causes ITB friction syndrome and patellofemoral pain). This is the simplest targeted exercise for them."} ],
+  feel: "A burn on the outside of both hips (gluteus medius). The stepping leg pushes out; the standing leg resists being pulled in.",
+  cues: [
+    {t:"Dose check", b:"This is a muscular-endurance exercise. ACSM guidance for endurance is multiple sets of about 15 or more reps with short rest (ACSM 2009), so 2 to 3 sets of 15 fits. Make it harder by moving the band down the leg or using a stronger band, not by adding more steps.", kind:"evidence"},
+    {t:"Progress by moving the band down", b:"Moving the band from the knees to the ankles, then to the forefoot, progressively increases gluteal activity (Cambridge 2012). Around the feet produced more glute activity without extra activity in the TFL at the front of the hip (Lewis 2018).", kind:"evidence"},
+    {t:"Why it matters (and what's uncertain)", b:"Hip abductor strengthening is part of the guideline-recommended hip plus knee exercise approach for front-of-knee pain, and the most common treatment in ITB syndrome studies. It's less clear that weak hips cause these problems: the 2019 guideline notes hip weakness looks more like a consequence of patellofemoral pain than a cause, and inward knee collapse didn't predict who developed it (Willy 2019)."}
+  ],
   mistakes: [{ items:[
-    "Standing too upright. Stay in a slight squat. If you're standing tall, the band is too easy and the glute med isn't loaded.",
+    "Standing too upright. If you're standing tall, the glute med isn't loaded.",
     "Dragging the trailing foot. Lift and step, don't shuffle.",
-    "Letting the band pull your knees together. The whole point is resisting that pull.",
-    "Using a band that's too light. You should feel the outside of your hip working by step 8 to 10."
+    "Letting the band pull your knees together.",
+    "Using a band that's too light. You should feel the outside of the hip by step 8 to 10."
   ]}],
   timer: null
 },
 
 "short-foot": {
   name: "Short-Foot / Toe Splay",
-  video: "short foot exercise toe splay intrinsic foot muscles",
-  chips: [ {k:"Sets",v:"2",hero:true}, {k:"Hold",v:"30 s",hero:true}, {k:"Per",v:"Foot"} ],
-  setup: "Sit in a chair with your bare foot flat on the floor.",
+  video: "short foot exercise toe splay",
+  chips: [ {k:"Days",v:"3 / week",hero:true}, {k:"Short foot",v:"3 x 10",hero:true}, {k:"Toe splay",v:"2 x 10"}, {k:"Each rep",v:"5 s hold"} ],
+  dose: [
+    ["Weeks 1–2","Seated, both feet together"],
+    ["Weeks 3–6","Standing on both feet"],
+    ["Weeks 7 onward","Standing on one foot: 2 x 10 per foot for short foot"],
+    ["Every week","3 days: Wednesday plus any 2 other days (about 5 to 7 min)"]
+  ],
+  setup: "Barefoot, starting seated with both feet flat on the floor. Move to standing, then single-leg standing, as the dose table shows.",
   stepGroups: [
     { title:"The movement (short foot)", steps:[
-      "Without curling your toes, try to shorten your foot by drawing the ball of your foot toward your heel. Imagine you're trying to raise the arch of your foot using only the muscles in the sole.",
-      "Your toes stay flat on the ground. They don't grip or curl.",
-      "Hold for 30 seconds."
+      "Without curling your toes, shorten your foot by drawing the ball of the foot toward the heel, so the arch lifts using only the muscles in the sole.",
+      "The toes stay flat and long. They don't grip or curl.",
+      "Hold for 5 seconds, relax for 5 seconds. That's one rep. Do 10 reps per set, 3 sets."
     ]},
     { title:"The movement (toe splay)", steps:[
-      "Spread all five toes apart as wide as you can, like a fan opening.",
-      "Hold for 5 seconds, relax, repeat for 30 seconds."
+      "Spread all five toes as wide as you can, like a fan opening.",
+      "Hold for 5 seconds, relax for 5 seconds. Do 10 reps per set, 2 sets."
     ]}
   ],
-  feel: "The small muscles in the sole of your foot (intrinsics) working. This is subtle. It won't feel like a big burn. Most people can barely do it at first.",
-  cues: [ {t:"Why it matters", b:"Stronger intrinsic foot muscles improve toe alignment and reduce shear against the shoe, which is directly relevant if you get recurring medial big-toe (hallux) blisters. It's a low-cost, low-risk intervention."} ],
+  feel: "The small muscles in the sole of the foot working. It's subtle and won't burn. Most people can barely do it at first.",
+  cues: [
+    {t:"Dose check: why this was increased", b:"The previous dose (2 x 30 s per foot, once a week) was far below every trial that showed a benefit. The runner injury trial used a 12-exercise foot programme 3 times a week for 8 weeks, then continued (Taddei 2020). A short-foot trial in runners used 15 minutes twice a day for 6 weeks and improved foot posture (Sulowska 2016). A 2024 trial in amateur runners used about 30 minutes a day for 8 weeks (Sulowska-Daszyk 2024). No study has defined a minimum. Three short sessions a week, progressed from sitting to single-leg, is the smallest dose that matches the frequency of the positive runner trial.", kind:"evidence"},
+    {t:"What the evidence shows", b:"The foot-core programme was associated with a 2.42-fold lower rate of running-related injuries over a year (Taddei 2020). It's a single trial with self-reported injuries, but the exercise is cheap and low risk. No trial shows it prevents specific problems such as toe blisters.", kind:"evidence"},
+    {t:"Fitting it in", b:"It needs no equipment. Do it seated at a desk, standing while brushing your teeth, or straight after an easy run."}
+  ],
   mistakes: [{ items:[
-    "Curling the toes under. The toes stay flat and long. Only the arch lifts.",
-    "Using the tibialis anterior (the muscle on the front of your shin) to do the work. If you see your ankle dorsiflexing (foot pulling up), you're using the wrong muscle.",
-    "Dismissing it because it feels like nothing. It takes 2 to 3 weeks before the motor control clicks in."
+    "Curling the toes under. Only the arch lifts.",
+    "Using the shin muscle (tibialis anterior) instead. If the foot pulls up at the ankle, you're using the wrong muscle.",
+    "Moving to single-leg before you can do the standing version without toe curling.",
+    "Dismissing it because it feels like nothing. It usually takes 2 to 3 weeks for the control to click."
   ]}],
   timer: {
     presets: [
-      {label:"Short foot 30 s", phases:[{label:"Short foot hold",s:30}], default:true},
-      {label:"Toe splay 5 s × 3", phases:[
-        {label:"Splay",s:5},{label:"Relax",s:5,rest:true},
-        {label:"Splay",s:5},{label:"Relax",s:5,rest:true},
-        {label:"Splay",s:5},{label:"Relax",s:5,rest:true}]},
-      {label:"Both feet 30 s + 30 s", phases:[
-        {label:"Foot 1",s:30},{label:"Swap feet",s:10,rest:true},{label:"Foot 2",s:30}]}
+      {label:"Short foot: 10 × 5 s", phases: buildIntervals(10,5,5,"Hold","Relax"), default:true},
+      {label:"Toe splay: 10 × 5 s", phases: buildIntervals(10,5,5,"Splay","Relax")},
+      {label:"Rest 30 s", phases:[{label:"Rest",s:30,rest:true}]}
     ]
   }
 },
 
 "pallof": {
   name: "Pallof Press",
-  video: "pallof press anti rotation core exercise form",
-  chips: [ {k:"Sets",v:"2",hero:true}, {k:"Reps",v:"10 / side",hero:true}, {k:"Hold",v:"2 s"} ],
-  setup: "Attach a resistance band to a fixed point (door handle, railing post, power rack) at roughly chest height. Stand side-on to the anchor point, holding the band with both hands at your chest. Step far enough away that there's meaningful tension in the band trying to rotate you toward the anchor.",
+  video: "pallof press anti rotation form",
+  chips: [ {k:"Sets",v:"2–3",hero:true}, {k:"Reps",v:"10 / side",hero:true}, {k:"Hold",v:"3 s"} ],
+  dose: [
+    ["Weeks 1–4","2 x 10 per side, 2 s hold"],
+    ["Weeks 5–11","3 x 10 per side, 3 s hold"],
+    ["Once that's steady","Keep 3 x 10; step further from the anchor or use a stronger band"]
+  ],
+  setup: "Attach a resistance band to a fixed point (door handle, railing post, rack) at about chest height. Stand side-on to the anchor holding the band at your chest with both hands. Step away until the band is clearly trying to rotate you toward the anchor.",
   stepGroups: [{ title:"The movement", steps:[
-    "Stand with feet shoulder-width apart, slight bend in knees.",
-    "Press the band straight out in front of your chest with both hands, extending your arms fully.",
-    "Hold for 2 seconds. The band is trying to twist you toward the anchor. Resist that rotation. Your torso stays perfectly square, facing straight ahead.",
-    "Bring your hands back to your chest. That's one rep."
+    "Feet shoulder-width apart, slight bend in the knees.",
+    "Press the band straight out from your chest until your arms are fully extended.",
+    "Hold for 3 seconds. Resist the twist; your torso stays square, facing straight ahead.",
+    "Bring your hands back to your chest. That's one rep. Do all reps on one side, then turn around."
   ]}],
-  feel: "Your deep core muscles (obliques, transverse abdominis) fighting to stop you rotating. This is not an arm exercise. If your arms are burning, you're using too much resistance. You should feel your trunk working to stay still.",
-  cues: [],
-  altTitle: "Alternative if you don't have a band or anchor point — Dead Bug",
+  feel: "Your trunk (obliques and deep abdominals) working to stop you rotating. If your arms are burning, the band is too strong.",
+  cues: [
+    {t:"Dose check", b:"There's no running-specific trial of anti-rotation dosing, and evidence that core exercises improve running is limited. The dose follows general ACSM resistance-training guidance: 1 to 3 sets of 8 to 12 reps for novices, progressing to multiple sets (ACSM 2009). A small increase to 3 x 10 with a longer hold is reasonable; after that, make it harder with more band tension rather than more reps. Keep it short: in the priority order it sits below everything else.", kind:"evidence"}
+  ],
+  altTitle: "No band or anchor point? Dead bug (3 x 8 per side, slow)",
   altSteps: [
-    "Lie on your back, arms reaching straight up toward the ceiling, knees bent at 90 degrees with shins parallel to the floor.",
-    "Press your lower back flat into the ground. There should be no gap between your lower back and the floor. This is the position you hold for the entire exercise.",
-    "Slowly extend your right arm overhead and your left leg out straight, lowering both toward the floor without touching it.",
-    "Return to start. Repeat with the opposite arm and leg. That's one rep per side.",
-    "If your lower back arches off the floor at any point, you've gone too far. Reduce the range."
+    "Lie on your back, arms straight up toward the ceiling, knees bent at 90 degrees with shins parallel to the floor.",
+    "Gently flatten your lower back toward the floor and keep it there for the whole exercise.",
+    "Slowly extend your right arm overhead and your left leg out straight, taking about 3 seconds, and lower both toward the floor without touching it.",
+    "Return, then repeat with the opposite arm and leg. That's one rep per side.",
+    "If your lower back arches off the floor, you've gone too far. Reduce the range."
   ],
   mistakes: [
     { t:"Pallof", items:[
-      "Rotating toward the band. That means the resistance is too high. Step closer to the anchor.",
-      "Flaring the elbows. Press straight forward, not out to the sides.",
-      "Rushing. The hold at full extension is where the anti-rotation demand is highest."
+      "Rotating toward the band. The resistance is too high; step closer to the anchor.",
+      "Flaring the elbows. Press straight forward.",
+      "Rushing. The hold at full extension is where the demand is highest."
     ]},
-    { t:"Dead Bug", items:[
-      "Letting the lower back arch off the floor. This is the single most important thing. If the back lifts, the core has disengaged.",
-      "Moving too fast. Slow and controlled.",
+    { t:"Dead bug", items:[
+      "Letting the lower back arch off the floor.",
+      "Moving too fast.",
       "Holding your breath. Exhale as you extend, inhale as you return."
     ]}
   ],
   timer: null
 },
 
-/* ------------------------ MODIFIED MONDAY ------------------------ */
+/* ======================= THURSDAY: PLYOMETRICS ======================= */
 
-"iso-calf": {
-  name: "Isometric Calf Hold",
-  alias: "Replaces standing and seated calf raises",
-  video: "isometric calf hold achilles tendinopathy exercise",
-  chips: [ {k:"Holds",v:"5",hero:true}, {k:"Time",v:"45 s",hero:true}, {k:"Rest",v:"60 s"}, {k:"Load",v:"Moderate"}, {k:"Legs",v:"Both"} ],
-  setup: "Same position as the standing calf raise (balls of feet on a step, heels off the edge). Hold a wall for balance.",
+"pogo": {
+  name: "Pogo Hops",
+  video: "pogo hops runners drill",
+  chips: [ {k:"Sets",v:"3–4",hero:true}, {k:"Contacts",v:"20–25",hero:true}, {k:"Total",v:"60–100"}, {k:"Count",v:"Each landing = 1"} ],
+  dose: [
+    ["Weeks 1–4","3 x 20 (60 contacts)"],
+    ["Weeks 5–8","4 x 20 (80 contacts)"],
+    ["Weeks 9–10","4 x 25 (100 contacts). Optional: swap the last set for single-leg pogos, 10 per leg"],
+    ["From 13 days out","None"]
+  ],
+  setup: "After 10 minutes of easy jogging, stand on a firm, flat surface in your running shoes, feet hip-width apart. Both feet land together, and each landing counts as one contact. Rest about 30 to 60 s between sets.",
   stepGroups: [{ title:"The movement", steps:[
-    "Rise up onto your toes to roughly halfway, not the absolute top of your range. Find a position that feels strong and produces no more than 3/10 pain.",
-    "Hold that position. Don't move. Breathe normally.",
-    "After 45 seconds, lower slowly and rest for 60 seconds."
+    "Bounce on the balls of your feet with stiff ankles, as if skipping without a rope.",
+    "Keep your knees almost straight. The bounce comes from the ankles and feet.",
+    "Think \"spring\", not \"jump\". Spend as little time on the ground as possible.",
+    "Arms relaxed at your sides or lightly swinging."
   ]}],
-  feel: "A deep, sustained burn in both calves. The tendon is loaded but not through a stretch-shorten cycle, which is what irritates a reactive Achilles.",
+  feel: "Quick, elastic loading through the Achilles and calf. It should feel bouncy and light. If it feels like hard work, you're jumping too high.",
   cues: [
-    {t:"Why isometric specifically", b:"Isometric loading at moderate intensity has an analgesic (pain-reducing) effect on irritable tendons without the mechanical provocation of repeated lengthening. It's the standard first-line loading approach in tendinopathy management before progressing back to isotonic (moving) exercises."},
-    {t:"Go / no-go rule", b:"Pain during the hold must be 3/10 or less, and must not be worse 24 hours later. If it is, reduce the rise height or drop the external load.", kind:"rule"}
+    {t:"Dose check: why this was increased", b:"The NSCA's standard guidance for beginners is about 80 to 100 foot contacts per session, 2 to 4 sessions a week, with 2 to 3 days between sessions (NSCA Essentials, plyometrics chapter). That figure covers all plyometric drills including harder jumps; pogos are low intensity, so building from 60 to 80–100 contacts is a sensible, conservative progression. The previous 60 contacts sat below the beginner range.", kind:"evidence"},
+    {t:"Frequency matters more than extra sets", b:"In a 2023 meta-analysis, plyometric training alone had only a trivial effect on running economy but a large effect when combined with heavy strength training, with bigger gains from programmes over 7 weeks, over 15 sessions and more than 2 days a week (Kinesiology 2023). If the calf check is clear in build weeks, the most useful addition is a second short exposure: 2 x 20 pogos before Tuesday's easy run. That keeps 48 h before Thursday and 72 h before the long run.", kind:"evidence"},
+    {t:"Protect the Achilles", b:"Increase contacts only when the Tuesday calf check has been clear for the previous 2 weeks. If it triggers isometric holds, skip pogos that week and restart at the previous week's dose.", kind:"rule"}
   ],
   mistakes: [{ items:[
-    "Going to full height. Stay at mid-range where the tendon is least compressed.",
-    "Holding your breath and tensing everything. Breathe. Only the calves should be working.",
-    "Skipping this and doing nothing. Doing nothing is worse than the isometric. The tendon needs load to remodel; it just needs the right type."
+    "Bending the knees deeply and turning it into squat jumps.",
+    "Jumping too high. Aim for 2 to 5 cm off the ground.",
+    "Landing on the heels. Stay on the balls of your feet.",
+    "Adding contacts and a second weekly session in the same week. Change one thing at a time."
   ]}],
   timer: {
     presets: [
-      {label:"Full protocol — 45 s × 5", phases: buildIntervals(5,45,60,"Hold","Rest"), default:true},
+      {label:"Rest 45 s", phases:[{label:"Rest",s:45,rest:true}], default:true},
+      {label:"Rest 60 s", phases:[{label:"Rest",s:60,rest:true}]}
+    ]
+  }
+},
+
+"a-skips": {
+  name: "A-Skips",
+  video: "A skip running drill",
+  chips: [ {k:"Sets",v:"3",hero:true}, {k:"Distance",v:"20 m",hero:true} ],
+  setup: "Inside the threshold warm-up, on a flat stretch of about 20 metres. Walk back to the start between sets.",
+  stepGroups: [{ title:"The movement", steps:[
+    "Skip forward, driving one knee up to about hip height with each skip.",
+    "The rhythm is \"skip-drive, skip-drive\": a small hop on the support leg as the other knee drives up.",
+    "Land on the ball of your foot each time.",
+    "The opposite arm swings forward with each knee drive, just like running."
+  ]}],
+  feel: "A rhythmic, bouncy, exaggerated running motion. Hip flexors drive the knee; calves and feet handle the bounce.",
+  cues: [
+    {t:"Dose check: no change", b:"A-skips are a coordination drill that rehearses the running pattern before faster work, not a strength stimulus. There is no good evidence that running drills themselves improve running economy, so 3 x 20 m is plenty and adding volume would only lengthen the warm-up.", kind:"evidence"}
+  ],
+  mistakes: [{ items:[
+    "Turning it into high knees without the skip. The small hop is the reactive part.",
+    "Leaning back. Stay tall with a slight forward lean.",
+    "Going too fast. This is a drill, not a sprint.",
+    "Stiff arms. Let them swing naturally."
+  ]}],
+  timer: null
+},
+
+/* ======================= SORE CALF ======================= */
+
+"calf-check": {
+  type: "info",
+  name: "Tuesday Calf and Achilles Check",
+  lede: "Do this every Tuesday morning before Strength A. It decides which calf work you do.",
+  chips: [ {k:"When",v:"Tue AM",hero:true}, {k:"Takes",v:"1 min"} ],
+  sections: [
+    { t:"How to check", list:[
+      "Notice the first steps out of bed.",
+      "Gently pinch along the Achilles tendon for any point tenderness.",
+      "Then move around easily for 5 to 10 minutes and see what settles."
+    ]},
+    { t:"Sign → action", kind:"amber", table:{ head:["Sign","Action"], rows:[
+      ["Diffuse muscle soreness that eases within 5 to 10 min of warming up","Proceed with Strength A as written."],
+      ["Morning stiffness over 30 min, or pain on the first steps out of bed","Swap both calf raises for isometric holds (next card). Keep the split squat, SL-RDL and Copenhagen. Skip pogo hops on Thursday."],
+      ["Point tenderness when you pinch the tendon","Skip all calf loading. Get it assessed before the next long run."],
+      ["Sudden sharp pain at the back of the calf, a palpable gap, or you can't do a single-leg heel raise","Stop. Seek assessment the same day."]
+    ]}},
+    { t:"Pain rule", kind:"warn", p:[
+      "During any calf work, pain must stay at 3/10 or less and must not be worse 24 hours later. If it is, reduce the rise height or the load."
+    ]},
+    { t:"If Tuesday is blocked and the calf is sore", p:[
+      "Move Strength A to Wednesday, then make Thursday's threshold an easy run."
+    ]}
+  ]
+},
+
+"iso-calf": {
+  name: "Isometric Calf Hold",
+  alias: "Replaces both calf raises when the check says so",
+  video: "isometric calf raise hold",
+  chips: [ {k:"Holds",v:"5",hero:true}, {k:"Time",v:"45 s",hero:true}, {k:"Rest",v:"60 s"}, {k:"Legs",v:"Both"} ],
+  setup: "Same position as the standing calf raise (balls of feet on a step, heels off the edge), or on flat ground if the step position is uncomfortable. Hold a wall for balance.",
+  stepGroups: [{ title:"The movement", steps:[
+    "Rise to roughly halfway up, not the top of your range. Find a position that feels strong and produces no more than 3/10 pain.",
+    "Hold still. Breathe normally.",
+    "After 45 seconds, lower slowly and rest for 60 seconds. Repeat 5 times."
+  ]}],
+  feel: "A deep, sustained burn in both calves. The tendon is loaded without the repeated stretch and recoil that tends to aggravate an irritable Achilles.",
+  cues: [
+    {t:"Why isometric, and what it won't do", b:"Holds let you keep loading the calf and tendon with less repeated lengthening, which many people tolerate better when the tendon is irritable. The popular claim that isometrics give reliable immediate pain relief hasn't held up: a 2020 systematic review found isometric exercise no better than isotonic (moving) exercise for chronic tendinopathy (Clifford 2020), and a 2020 trial in Achilles tendinopathy found no immediate pain relief (van der Vlist 2020). Use holds as a tolerable way to keep loading, and return to moving calf raises as symptoms settle.", kind:"evidence"},
+    {t:"Load", b:"Hard enough that the last 10 to 15 seconds of each hold take real effort. Tendons adapt to high loads (above about 70% of maximum) (Bohm 2015), so as the pain rule allows, progress from two legs to one leg, then one leg holding a dumbbell."},
+    {t:"Go / no-go rule", b:"Pain during the hold must be 3/10 or less, and must not be worse 24 hours later. If it is, reduce the rise height or drop the load.", kind:"rule"}
+  ],
+  mistakes: [{ items:[
+    "Going to the top of the range, or sinking into the bottom stretch. Mid-range is usually best tolerated.",
+    "Holding your breath and tensing everything. Only the calves should be working.",
+    "Stopping all calf loading. Complete rest is rarely needed for an irritable tendon; loading within the pain rule is the usual approach. Point tenderness or sudden sharp pain is different: see the calf check card."
+  ]}],
+  timer: {
+    presets: [
+      {label:"Full protocol: 45 s × 5", phases: buildIntervals(5,45,60,"Hold","Rest"), default:true},
       {label:"Single 45 s hold", phases:[{label:"Hold",s:45}]},
       {label:"45 s hold + 60 s rest", phases:[{label:"Hold",s:45},{label:"Rest",s:60,rest:true}]}
     ]
   }
+},
+
+/* ======================= GUIDE ======================= */
+
+"week-rules": {
+  type: "info",
+  name: "The Week, Priorities and Taper",
+  lede: "How the sessions fit around the running. Scheduling rules are coaching heuristics, not physiological findings; the main aim is that the work happens at all.",
+  sections: [
+    { t:"Baseline week", table:{ head:["Day","Session"], rows:[
+      ["Mon","Full rest. Mobility 10 min optional."],
+      ["Tue","Easy 40 min + Strength A (heavy, 30 min). About 6 h apart if possible, otherwise run first."],
+      ["Wed","Core and foot, about 12 to 15 min. Foot exercises also on 2 other days."],
+      ["Thu","Threshold, with plyometrics inside the warm-up."],
+      ["Fri","Rest, or easy 30 min."],
+      ["Sat","Rest."],
+      ["Sun","Long run."]
+    ]}},
+    { t:"If the week compresses", p:[
+      "Priority: long run > threshold > easy > Strength A > core and foot."
+    ], table:{ head:["Situation","Do this"], rows:[
+      ["Tuesday blocked entirely","Strength A on Monday evening. Accept the post-long-run compromise."],
+      ["Tuesday blocked, calf sore","Strength A on Wednesday, then Thursday threshold becomes easy."],
+      ["Only 20 min free","Split the easy run: 2 x 20 min beats zero."],
+      ["Poor sleep, heavy legs, raised resting HR","Convert the threshold to easy and move on."],
+      ["Session missed","Don't make it up. Cramming causes injuries."]
+    ]}},
+    { t:"Taper", kind:"amber", table:{ head:["When","Rule"], rows:[
+      ["From 13 days out","No plyometrics, including in warm-ups."],
+      ["12 days out","Last heavy Strength A."],
+      ["After that","Core, foot and mobility only. Nothing loaded in race week."]
+    ]}},
+    { t:"Rest between heavy sets", p:[
+      "Heavy sets need roughly 2 minutes before the same muscles go again. To fit Strength A into 30 minutes, pair two exercises that use different muscles and alternate them, for example calf raise with Copenhagen, and split squat with SL-RDL on the opposite leg."
+    ]}
+  ]
+},
+
+"dose-check": {
+  type: "info",
+  name: "Dose Check: Sets and Reps",
+  lede: "Each exercise's sets and reps compared with the best available trial protocols and training standards. An arrow (→) shows a dose that changed in this version.",
+  sections: [
+    { t:"Strength A (Tuesday)", table:{ head:["Exercise","Standard and verdict"], rows:[
+      ["Standing calf raise, 4 x 8–10","Tendons adapt to high loads (above ~70% of max) over 12+ weeks (Bohm 2015). Keep, but it must be loaded heavily."],
+      ["Seated calf raise, 3 x 12–15","Within ACSM strength and hypertrophy ranges. Keep; the last reps must be hard."],
+      ["Split squat and SL-RDL, 3 x 8","ACSM: 1–3 sets of 8–12 for novice to intermediate (ACSM 2009); runner trials favour high loads (Llanos-Lagos 2024). Keep."],
+      ["Copenhagen, 3 x 20–30 s","Similar weekly work to the groin-prevention trial (Harøy 2019). Keep."]
+    ]}},
+    { t:"Core and foot (Wednesday)", kind:"amber", table:{ head:["Exercise","Standard and verdict"], rows:[
+      ["Banded walk: 2 x 15 → 2–3 x 15","ACSM endurance: multiple sets of 15+ reps, short rest. Small increase; progress by moving the band down."],
+      ["Short foot: 2 x 30 s once a week → 3 x 10 x 5 s, 3 days a week","Positive trials used 3 sessions a week up to twice daily (Taddei 2020; Sulowska 2016; Sulowska-Daszyk 2024). Increased."],
+      ["Toe splay: 30 s → 2 x 10 x 5 s","Same reasoning. Increased."],
+      ["Pallof: 2 x 10, 2 s → 3 x 10, 3 s","No running-specific dose evidence; follows general ACSM guidance. Small increase, then progress band tension."]
+    ]}},
+    { t:"Plyometrics (Thursday)", kind:"amber", table:{ head:["Exercise","Standard and verdict"], rows:[
+      ["Pogo hops: 60 → 80–100 contacts","NSCA beginner guidance: 80–100 contacts per session, 2–4 sessions a week. Increased gradually, gated by the calf check."],
+      ["Frequency: once a week","Bigger running-economy gains above 2 days a week (Kinesiology 2023). Optional second short set of pogos before Tuesday's easy run."],
+      ["A-skips, 3 x 20 m","A drill, not a training stimulus. Keep."]
+    ]}},
+    { t:"One thing not changed", kind:"info", p:[
+      "ACSM recommends training each muscle group 2 to 3 days a week for novices (ACSM 2009). v03 deliberately uses one heavy session a week because the real limit was whether sessions happened at all. If you have time in the base and build weeks, a second, lighter Strength A is the most useful addition. Don't add it in the taper."
+    ]}
+  ]
+},
+
+"mobility": {
+  type: "info",
+  name: "Mobility",
+  lede: "Optional, short, and for feeling loose. It isn't an injury-prevention tool.",
+  chips: [ {k:"When",v:"Mon, race week"}, {k:"Time",v:"≈10 min"} ],
+  sections: [
+    { t:"What the plan means by mobility", p:[
+      "Easy movement on rest days and in race week: leg swings, walking lunges, hip circles, ankle rocks, or any gentle stretches you like."
+    ]},
+    { t:"What the evidence says", kind:"info", p:[
+      "Stretching hasn't been shown to prevent injuries. In a meta-analysis of 25 randomised trials, stretching programmes had no effect on sports injuries (RR 0.96), while strength training cut them to under a third (Lauersen 2014). For running specifically, no good-quality trial supports any particular mobility routine."
+    ]},
+    { t:"General guidance", list:[
+      "Treat it as optional recovery. Keep it gentle and pain-free.",
+      "Dynamic movements before running are a reasonable warm-up.",
+      "Short on time? Drop mobility before strength.",
+      "If a specific stiff joint limits an exercise (for example, ankle range limiting split squat depth), work on that range directly."
+    ]},
+    { t:"What this app doesn't prescribe", kind:"warn", p:[
+      "Specific stretches, hold times or foam-rolling routines. The evidence doesn't support prescribing them for runners, so there's no point pretending otherwise."
+    ]}
+  ]
+},
+
+"knee-hip": {
+  type: "info",
+  name: "Knee, Hip and ITB: What Helps",
+  lede: "A literature check of what has good evidence. Short version: the programme already contains the exercise types with the best support. Nothing extra is added.",
+  sections: [
+    { t:"By problem", table:{ head:["Problem","Evidence and what it supports"], rows:[
+      ["<span class='tag hi'>Moderate–strong</span>Front-of-knee pain (patellofemoral)","Clinical practice guideline: combined hip- and knee-targeted exercise is recommended; running gait retraining may help some runners (Willy 2019). In this app: split squat, SL-RDL, banded lateral walk."],
+      ["<span class='tag hi'>Good, one trial</span>Lateral hip pain (gluteal tendinopathy)","High-quality RCT (n=204): education on load management plus exercise beat a corticosteroid injection and wait-and-see at 8 weeks, and had better global improvement than the injection at 52 weeks (Mellor 2018). The programme was physio-led and specific, so get assessed rather than improvising."],
+      ["<span class='tag mid'>Moderate, other sport</span>Groin (adductor)","Copenhagen-based programme cut groin problems by 41% in footballers (Harøy 2019). In this app: Copenhagen plank."],
+      ["<span class='tag lo'>Low</span>ITB syndrome","A 2024 review found only 13 studies (201 runners, 5 RCTs, several case studies). Hip abductor strengthening is the common treatment, but whether weak hips cause ITB syndrome is unclear (Sanchez-Alvarado 2024). Don't add ITB-specific work; manage running load."],
+      ["<span class='tag mid'>Mixed</span>Running injuries overall","Strength training cut sports injuries to under a third in meta-analyses dominated by team sports (Lauersen 2014), but a 12-week self-directed programme in 720 first-time marathoners didn't reduce overuse injuries (Toresdahl 2020). A foot-core RCT in runners was positive (Taddei 2020)."]
+    ]}},
+    { t:"Exercises flagged in this app", kind:"info", list:[
+      "Rear-foot elevated split squat: knee and hip (patellofemoral pain guideline).",
+      "Single-leg RDL: hip extension (patellofemoral pain guideline).",
+      "Banded lateral walk: hip abduction (patellofemoral guideline; common in ITB syndrome studies, low evidence).",
+      "Copenhagen plank: adductors (groin trial in footballers).",
+      "Short foot: overall running injury (single runner RCT, needs 3 sessions a week)."
+    ]},
+    { t:"When to get it assessed", kind:"warn", list:[
+      "Pain that changes how you run, or keeps rising across sessions.",
+      "Swelling, locking, giving way, or night pain.",
+      "No improvement after 2 to 3 weeks of reducing load."
+    ]}
+  ]
+},
+
+"sources": {
+  type: "info",
+  name: "Sources",
+  lede: "Studies behind the changes in this version. Links open the publisher or DOI page.",
+  sections: [
+    { t:"Split squat and single-leg RDL", refs:[
+      {l:"Aygun-Polat E et al. Targeted muscle activation in Bulgarian split squat variations: effects of trunk position. BMC Sports Sci Med Rehabil 2025;17:251.", u:"https://doi.org/10.1186/s13102-025-01306-z", n:"21 trained athletes. 40° trunk flexion increased glute max and biceps femoris EMG."},
+      {l:"Effects of step length on the lower extremity during the split squat. Front Bioeng Biotechnol 2023.", u:"https://doi.org/10.3389/fbioe.2023.1277493", n:"Longer step length increased glute max activity."},
+      {l:"Mo RCY et al. Effects of loading positions on trunk and hip muscle activation during single-leg Romanian deadlifts. Front Physiol 2023;14:1264604.", u:"https://doi.org/10.3389/fphys.2023.1264604", n:"12 trained men. Contralateral loading increased glute medius and upper glute max activity."},
+      {l:"Llanos-Lagos C et al. Effect of strength training programs in middle- and long-distance runners' economy at different running speeds. Sports Med 2024;54(4):895-932.", u:"https://doi.org/10.1007/s40279-023-01978-y", n:"High-load (≥80% 1RM) and plyometric training may improve running economy."}
+    ]},
+    { t:"Calf, Achilles and plyometrics", refs:[
+      {l:"Dorn TW, Schache AG, Pandy MG. Muscular strategy shift in human running. J Exp Biol 2012;215:1944-56.", u:"https://doi.org/10.1242/jeb.064527", n:"Modelling study, 9 runners."},
+      {l:"Clifford C et al. Effectiveness of isometric exercise in the management of tendinopathy. BMJ Open Sport Exerc Med 2020;6:e000760.", u:"https://doi.org/10.1136/bmjsem-2020-000760", n:"Isometric not superior to isotonic exercise; response is variable."},
+      {l:"van der Vlist AC et al. Isometric exercises do not provide immediate pain relief in Achilles tendinopathy. Scand J Med Sci Sports 2020.", u:"https://doi.org/10.1111/sms.13728", n:"Quasi-randomised trial."},
+      {l:"Effects of plyometric jump training on running economy in endurance runners: systematic review and meta-analysis. Kinesiology 2023;55(2).", u:"https://doi.org/10.26582/k.55.2.11", n:"Trivial effect alone; large when combined with resistance training."}
+    ]},
+    { t:"Knee, hip, groin and foot", refs:[
+      {l:"Willy RW et al. Patellofemoral pain: clinical practice guidelines. J Orthop Sports Phys Ther 2019;49(9):CPG1-CPG95.", u:"https://doi.org/10.2519/jospt.2019.0302"},
+      {l:"Mellor R et al. Education plus exercise versus corticosteroid injection versus wait and see for gluteal tendinopathy (LEAP). BMJ 2018;361:k1662.", u:"https://doi.org/10.1136/bmj.k1662"},
+      {l:"Harøy J et al. The Adductor Strengthening Programme prevents groin problems among male football players. Br J Sports Med 2019;53(3):150-7.", u:"https://doi.org/10.1136/bjsports-2017-098937"},
+      {l:"Sanchez-Alvarado A et al. Conservative treatment strategies for iliotibial band syndrome in runners: a systematic review. Front Sports Act Living 2024;6:1386456.", u:"https://doi.org/10.3389/fspor.2024.1386456"},
+      {l:"Cambridge EDJ et al. Progressive hip rehabilitation: the effects of resistance band placement on gluteal activation. Clin Biomech 2012;27(7):719-24.", u:"https://doi.org/10.1016/j.clinbiomech.2012.03.002"},
+      {l:"Lewis CL et al. Effect of band location on hip muscle activation during resisted side stepping. J Athl Train 2018;53(11):1071-81.", u:"https://pmc.ncbi.nlm.nih.gov/articles/PMC6333220/"},
+      {l:"Taddei UT et al. Foot core training to prevent running-related injuries: a randomized controlled trial. Am J Sports Med 2020.", u:"https://search.pedro.org.au/search-results/record-detail/62997"}
+    ]},
+    { t:"Dosing standards and trials", refs:[
+      {l:"American College of Sports Medicine. Progression models in resistance training for healthy adults. Med Sci Sports Exerc 2009;41(3):687-708.", u:"https://doi.org/10.1249/MSS.0b013e3181915670", n:"Novice strength: 1–3 sets of 8–12, 2–3 days a week. Endurance: multiple sets of 15+ reps, short rest."},
+      {l:"Bohm S, Mersmann F, Arampatzis A. Human tendon adaptation in response to mechanical loading: a systematic review and meta-analysis. Sports Med Open 2015;1:7.", u:"https://doi.org/10.1186/s40798-015-0009-9", n:"High loads (>70% of max) and 12+ weeks drive tendon adaptation; contraction type matters little."},
+      {l:"Haff GG, Triplett NT (eds). Essentials of Strength Training and Conditioning, 4th ed. NSCA / Human Kinetics, 2016. Chapter 18: plyometric training.", n:"Beginner 80–100, intermediate 100–120, advanced 120–140 foot contacts per session; 2–4 sessions a week."},
+      {l:"Sulowska I et al. The influence of plantar short foot muscle exercises on foot posture and fundamental movement patterns in long-distance runners. PLoS One 2016;11(6):e0157917.", u:"https://doi.org/10.1371/journal.pone.0157917", n:"Non-randomised. 15 min twice daily for 6 weeks, sitting → standing → half squat."},
+      {l:"Sulowska-Daszyk I, Zając B, Mika A. The influence of foot muscle exercises and minimalist shoes on lactate threshold velocity in long-distance amateur runners: a randomized controlled trial. Sci Rep 2024.", u:"https://doi.org/10.1038/s41598-024-67525-5", n:"About 30 min daily for 8 weeks, progressed every 2 weeks."}
+    ]},
+    { t:"Injury prevention and stretching", refs:[
+      {l:"Lauersen JB, Bertelsen DM, Andersen LB. The effectiveness of exercise interventions to prevent sports injuries. Br J Sports Med 2014;48:871-7.", u:"https://bjsm.bmj.com/content/48/11/871"},
+      {l:"Toresdahl BG et al. A randomized study of a strength training program to prevent injuries in runners of the New York City Marathon. Sports Health 2020;12(1):74-9.", u:"https://doi.org/10.1177/1941738119877180"}
+    ]}
+  ]
 }
 
 };
 
-function buildIntervals(rounds, work, rest, wLabel, rLabel){
-  const out = [];
-  for (let i=1;i<=rounds;i++){
-    out.push({label:`${wLabel} ${i} of ${rounds}`, s:work, round:i, rounds:rounds});
-    if (i<rounds) out.push({label:`${rLabel} ${i} of ${rounds}`, s:rest, rest:true, round:i, rounds:rounds});
-  }
-  return out;
-}
-
 const SESSIONS = [
-  { id:"a", tab:"Monday", tabSub:"Session A", title:"Monday — Session A", meta:"30 min, heavy",
+  { id:"a", tab:"Tuesday", tabSub:"Strength A", title:"Tuesday · Strength A", rest:120,
+    note:"Heavy, 30 min, after the easy run. Do the calf check first (Sore calf tab). Last heavy session is 12 days before race day.",
     items:["standing-calf","seated-calf","split-squat","sl-rdl","copenhagen"] },
-  { id:"b", tab:"Wednesday", tabSub:"Session B", title:"Wednesday — Session B", meta:"15–20 min, reactive",
-    items:["pogo","a-skips","band-walk","short-foot","pallof"] },
-  { id:"m", tab:"Modified", tabSub:"Monday", title:"Modified Monday", meta:"Calf or Achilles sore",
-    note:"Calf or Achilles sore: exercises 1 and 2 are replaced by the isometric hold below. Exercises 3, 4 and 5 stay unchanged.",
-    items:["iso-calf","split-squat","sl-rdl","copenhagen"] }
+  { id:"b", tab:"Wednesday", tabSub:"Core & foot", title:"Wednesday · Core and foot", rest:60,
+    note:"About 12 to 15 minutes. The foot exercises are also done on 2 other days of the week (about 5 to 7 minutes each).",
+    items:["band-walk","short-foot","pallof"] },
+  { id:"p", tab:"Thursday", tabSub:"Plyometrics", title:"Thursday · Plyometrics", rest:60,
+    note:"About 5 to 7 min inside the threshold warm-up: after 10 min easy jogging, before the threshold block. Stop all plyometrics 13 days before race day.",
+    items:["pogo","a-skips"] },
+  { id:"m", tab:"Sore calf", tabSub:"Modified A", title:"Sore calf · Modified Strength A", rest:120,
+    note:"Use when the Tuesday check shows stiffness or first-step pain. Isometric holds replace both calf raises; everything else stays.",
+    items:["calf-check","iso-calf","split-squat","sl-rdl","copenhagen"] },
+  { id:"g", tab:"Guide", tabSub:"Rules & evidence", title:"Guide", rest:60,
+    items:["week-rules","dose-check","mobility","knee-hip","sources"] }
 ];
 
 /* =========================================================
    STATE
    ========================================================= */
 
-const LS_KEY = "hm-strength-v02";
+const LS_KEY = "hm-strength-v03";
 let sIdx = 0, eIdx = 0;
 
 try {
@@ -663,15 +987,19 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const session = () => SESSIONS[sIdx];
 const current = () => EX[session().items[eIdx]];
+const isInfo = ex => ex && ex.type === "info";
 
 /* =========================================================
-   TIMER (timestamp-anchored so it never drifts)
+   TIMER
+   Wall-clock anchored (Date.now) so it survives screen locks and
+   background tabs; overshoot carries into the next phase so a
+   multi-phase protocol never drifts.
    ========================================================= */
 
 const T = {
-  phases: [], idx: 0, remaining: 0, endAt: 0, running: false,
+  phases: [], idx: 0, remaining: 0, endAt: 0, running: false, done: false,
   stopwatch: false, elapsed: 0, base: 0, startedAt: 0,
-  raf: 0, presetIdx: 0, wakeLock: null
+  tick: 0, presetIdx: 0, wakeLock: null
 };
 
 const timerEl = document.createElement("section");
@@ -682,8 +1010,8 @@ timerEl.innerHTML = `
     <span class="caret" id="tCaret">Hide</span>
   </button>
   <div class="t-body" id="tBody">
-    <div class="t-phase" id="tPhase"></div>
-    <div class="t-display" id="tDisplay">00:00</div>
+    <div class="t-phase" id="tPhase" aria-live="polite"></div>
+    <div class="t-display" id="tDisplay" role="timer" aria-live="off">00:00</div>
     <div class="t-round" id="tRound"></div>
     <div class="t-bar"><i id="tFill"></i></div>
     <div class="t-presets" id="tPresets"></div>
@@ -694,28 +1022,36 @@ timerEl.innerHTML = `
     </div>
   </div>`;
 
-const tHead=timerEl.querySelector("#tHead"), tBadge=timerEl.querySelector("#tBadge"),
-      tCaret=timerEl.querySelector("#tCaret"), tPhase=timerEl.querySelector("#tPhase"),
-      tDisplay=timerEl.querySelector("#tDisplay"), tRound=timerEl.querySelector("#tRound"),
-      tFill=timerEl.querySelector("#tFill"), tPresets=timerEl.querySelector("#tPresets"),
-      tStart=timerEl.querySelector("#tStart"), tPause=timerEl.querySelector("#tPause"),
-      tReset=timerEl.querySelector("#tReset");
+const q = sel => timerEl.querySelector(sel);
+const tHead=q("#tHead"), tBadge=q("#tBadge"), tCaret=q("#tCaret"), tPhase=q("#tPhase"),
+      tDisplay=q("#tDisplay"), tRound=q("#tRound"), tFill=q("#tFill"), tPresets=q("#tPresets"),
+      tStart=q("#tStart"), tPause=q("#tPause"), tReset=q("#tReset");
 
-const DEFAULT_PRESETS = [
-  {label:"30 s", phases:[{label:"Work",s:30}]},
-  {label:"60 s", phases:[{label:"Work",s:60}], default:true},
-  {label:"90 s rest", phases:[{label:"Rest",s:90,rest:true}]},
-  {label:"Stopwatch", stopwatch:true}
-];
-
-let activePresets = DEFAULT_PRESETS;
+function restPresets(defaultRest){
+  const list = [
+    {label:"60 s rest", phases:[{label:"Rest",s:60,rest:true}]},
+    {label:"90 s rest", phases:[{label:"Rest",s:90,rest:true}]},
+    {label:"2 min rest", phases:[{label:"Rest",s:120,rest:true}]},
+    {label:"Stopwatch", stopwatch:true}
+  ];
+  const want = defaultRest === 120 ? 2 : defaultRest === 90 ? 1 : 0;
+  list[want].default = true;
+  return list;
+}
+let activePresets = restPresets(60);
 
 /* --- audio cues, generated in-browser --- */
 let AC = null;
-function beep(times, freq, dur){
+function ensureAudio(){
   try{
     if(!AC) AC = new (window.AudioContext||window.webkitAudioContext)();
     if(AC.state === "suspended") AC.resume();
+  }catch(e){}
+}
+function beep(times, freq, dur){
+  try{
+    ensureAudio();
+    if(!AC) return;
     for(let i=0;i<times;i++){
       const t0 = AC.currentTime + i*(dur+0.09);
       const o = AC.createOscillator(), g = AC.createGain();
@@ -729,10 +1065,10 @@ function beep(times, freq, dur){
 }
 async function lockScreen(on){
   try{
-    if(on && "wakeLock" in navigator && !T.wakeLock){
+    if(on && "wakeLock" in navigator && !T.wakeLock && document.visibilityState === "visible"){
       T.wakeLock = await navigator.wakeLock.request("screen");
       T.wakeLock.addEventListener("release", ()=>{ T.wakeLock = null; });
-    } else if(!on && T.wakeLock){ await T.wakeLock.release(); T.wakeLock = null; }
+    } else if(!on && T.wakeLock){ const w = T.wakeLock; T.wakeLock = null; await w.release(); }
   }catch(e){}
 }
 
@@ -741,98 +1077,107 @@ function fmt(ms){
   const m = Math.floor(total/60), s = total%60;
   return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
 }
+function setPhaseText(s){ if(tPhase.textContent !== s) tPhase.textContent = s; }
 
-function loadPreset(i, keepCollapsed){
+function stopLoop(){ if(T.tick){ clearInterval(T.tick); T.tick = 0; } }
+
+function setButtons(state){
+  if(state === "running"){ tStart.disabled = true;  tPause.disabled = false; tStart.textContent = "Running"; }
+  else if(state === "paused"){ tStart.disabled = false; tPause.disabled = true; tStart.textContent = "Resume"; }
+  else { tStart.disabled = false; tPause.disabled = true; tStart.textContent = "Start"; }
+}
+
+function loadPreset(i){
   stopLoop();
   T.presetIdx = i;
   const p = activePresets[i];
-  T.running = false;
+  T.running = false; T.done = false;
   T.stopwatch = !!p.stopwatch;
   T.phases = p.stopwatch ? [] : p.phases.map(x=>Object.assign({},x));
-  T.idx = 0;
-  T.elapsed = 0; T.base = 0;
+  T.idx = 0; T.elapsed = 0; T.base = 0;
   T.remaining = T.stopwatch ? 0 : T.phases[0].s*1000;
   [...tPresets.children].forEach((b,bi)=>b.setAttribute("aria-pressed", bi===i ? "true":"false"));
-  tStart.textContent = "Start"; tStart.disabled = false; tPause.disabled = true;
-  paint(true);
-  if(!keepCollapsed){ /* no-op */ }
+  setButtons("idle");
+  lockScreen(false);
+  paint();
 }
 
-function paint(reset){
-  const phase = T.stopwatch ? null : T.phases[T.idx];
-  const isRest = !!(phase && phase.rest);
-  tDisplay.classList.toggle("rest", isRest && !T.done);
-  tDisplay.classList.toggle("done", !!T.done);
-
+function paint(){
   if(T.stopwatch){
-    tPhase.textContent = "Stopwatch";
+    tDisplay.classList.remove("rest","done");
+    setPhaseText("Stopwatch");
     tDisplay.textContent = fmt(T.elapsed);
     tRound.textContent = T.running ? "Counting up" : "";
-    tFill.style.width = "0%";
-    tFill.classList.remove("rest");
+    tFill.style.width = "0%"; tFill.classList.remove("rest");
     return;
   }
-  tPhase.textContent = T.done ? "Complete" : phase.label;
+  const phase = T.phases[T.idx];
+  const isRest = !!phase.rest && !T.done;
+  tDisplay.classList.toggle("rest", isRest);
+  tDisplay.classList.toggle("done", T.done);
+  setPhaseText(T.done ? "Complete" : phase.label);
   tDisplay.textContent = T.done ? "00:00" : fmt(T.remaining);
   const total = T.phases.length;
-  tRound.textContent = total > 1 ? `Segment ${Math.min(T.idx+1,total)} of ${total}` : "";
+  tRound.textContent = total > 1 ? `Segment ${T.idx+1} of ${total}` : "";
   const pct = T.done ? 100 : (1 - (T.remaining/(phase.s*1000))) * 100;
   tFill.style.width = Math.max(0,Math.min(100,pct)) + "%";
   tFill.classList.toggle("rest", isRest);
-  if(reset){ T.done = false; tDisplay.classList.remove("done"); tFill.style.width = "0%"; }
 }
 
-function loop(){
-  if(!T.running) return;
-  const now = performance.now();
-  if(T.stopwatch){
-    T.elapsed = T.base + (now - T.startedAt);
-    paint();
-  } else {
-    T.remaining = T.endAt - now;
-    if(T.remaining <= 0){
-      const last = T.idx >= T.phases.length - 1;
-      if(last){
-        T.remaining = 0; T.running = false; T.done = true;
-        beep(3, 880, 0.16);
-        tStart.textContent = "Start"; tStart.disabled = false; tPause.disabled = true;
-        lockScreen(false);
-        paint();
-        return;
-      }
-      T.idx++;
-      const nxt = T.phases[T.idx];
-      beep(nxt.rest ? 1 : 2, nxt.rest ? 520 : 760, 0.14);
-      T.endAt = now + nxt.s*1000;
-      T.remaining = nxt.s*1000;
-    }
-    paint();
-  }
-  T.raf = requestAnimationFrame(loop);
+function finish(){
+  stopLoop();
+  T.remaining = 0; T.running = false; T.done = true;
+  beep(3, 880, 0.16);
+  setButtons("idle");
+  lockScreen(false);
+  paint();
 }
-function stopLoop(){ if(T.raf) cancelAnimationFrame(T.raf); T.raf = 0; }
+
+function tick(){
+  if(!T.running) return;
+  const now = Date.now();
+  if(T.stopwatch){ T.elapsed = T.base + (now - T.startedAt); paint(); return; }
+  let advanced = false;
+  while(now >= T.endAt){
+    if(T.idx >= T.phases.length - 1){ finish(); return; }
+    T.idx++;
+    T.endAt += T.phases[T.idx].s*1000;   // carry overshoot forward
+    advanced = true;
+  }
+  if(advanced){
+    const nxt = T.phases[T.idx];
+    beep(nxt.rest ? 1 : 2, nxt.rest ? 520 : 760, 0.14);
+  }
+  T.remaining = T.endAt - now;
+  paint();
+}
 
 function startTimer(){
   if(T.running) return;
   if(T.done) loadPreset(T.presetIdx);
+  ensureAudio();
   beep(1, 660, 0.1);
   T.running = true;
-  const now = performance.now();
+  const now = Date.now();
   if(T.stopwatch){ T.startedAt = now; }
   else { T.endAt = now + (T.remaining > 0 ? T.remaining : T.phases[T.idx].s*1000); }
-  tStart.disabled = true; tPause.disabled = false; tStart.textContent = "Running";
+  setButtons("running");
   lockScreen(true);
-  stopLoop(); T.raf = requestAnimationFrame(loop);
+  stopLoop();
+  T.tick = setInterval(tick, 200);
+  tick();
 }
 function pauseTimer(){
   if(!T.running) return;
   T.running = false; stopLoop();
-  if(T.stopwatch) T.base = T.elapsed; else T.remaining = Math.max(0, T.endAt - performance.now());
-  tStart.disabled = false; tPause.disabled = true; tStart.textContent = "Resume";
+  if(T.stopwatch){ T.base += Date.now() - T.startedAt; T.elapsed = T.base; }
+  else { T.remaining = Math.max(0, T.endAt - Date.now()); }
+  setButtons("paused");
   lockScreen(false);
   paint();
 }
-function resetTimer(){ lockScreen(false); loadPreset(T.presetIdx); }
+function resetTimer(){ loadPreset(T.presetIdx); }
+function haltTimer(){ stopLoop(); T.running = false; lockScreen(false); }
 
 tStart.addEventListener("click", startTimer);
 tPause.addEventListener("click", pauseTimer);
@@ -842,13 +1187,14 @@ tHead.addEventListener("click", ()=>{
   tHead.setAttribute("aria-expanded", String(!collapsed));
   tCaret.textContent = collapsed ? "Show" : "Hide";
 });
-document.addEventListener("visibilitychange", ()=>{ if(!document.hidden && T.running) paint(); });
+document.addEventListener("visibilitychange", ()=>{
+  if(document.visibilityState === "visible" && T.running){ tick(); lockScreen(true); }
+});
 
 function configureTimer(ex){
-  pauseTimer();
-  T.done = false;
+  haltTimer();
   const timed = !!ex.timer;
-  activePresets = timed ? ex.timer.presets.concat([{label:"Stopwatch", stopwatch:true}]) : DEFAULT_PRESETS;
+  activePresets = timed ? ex.timer.presets.concat([{label:"Stopwatch", stopwatch:true}]) : restPresets(session().rest);
   tBadge.hidden = !timed;
   timerEl.classList.toggle("timed", timed);
   timerEl.classList.toggle("collapsed", !timed);
@@ -896,57 +1242,86 @@ function buildJump(){
   sel.value = String(eIdx);
 }
 
+function chipsHTML(chips){
+  return (chips||[]).map(c=>{
+    const cls = c === KNEE_HIP_FLAG ? " flag" : (c.hero ? " hero" : "");
+    return `<div class="chip${cls}"><span class="k">${esc(c.k)}</span><span class="v">${esc(c.v)}</span></div>`;
+  }).join("");
+}
 function stepsHTML(groups){
   return groups.map(g=>`
     ${groups.length>1 ? `<div class="sub-t">${esc(g.title)}</div>` : ""}
-    <ol class="steps">${g.steps.map(s=>`<li>${esc(s)}</li>`).join("")}</ol>
-  `).join("");
+    <ol class="steps">${g.steps.map(s=>`<li>${esc(s)}</li>`).join("")}</ol>`).join("");
+}
+function tableHTML(t, allowTags){
+  const cell = s => allowTags ? s : esc(s);   // only trusted, hard-coded tag markup is passed unescaped
+  return `<div class="tbl-wrap"><table class="tbl">
+    ${t.head ? `<thead><tr>${t.head.map(h=>`<th scope="col">${esc(h)}</th>`).join("")}</tr></thead>` : ""}
+    <tbody>${t.rows.map(r=>`<tr><th scope="row">${cell(r[0])}</th><td>${esc(r[1])}</td></tr>`).join("")}</tbody>
+  </table></div>`;
+}
+
+function renderExercise(ex, s){
+  const cues = (ex.cues||[]).map(c=>`
+    <div class="callout ${c.kind||""}"><h4>${esc(c.t)}</h4><p>${esc(c.b)}</p></div>`).join("");
+  const mistakes = ex.mistakes.map(m=>`
+    ${m.t ? `<div class="sub-t">${esc(m.t)}</div>` : ""}
+    <ul class="dots bad">${m.items.map(i=>`<li>${esc(i)}</li>`).join("")}</ul>`).join("");
+  const feedback = ex.feedback ? ex.feedback.map(f=>`
+    <div class="fb-row"><div class="if">${esc(f.i)}</div><div class="then">${esc(f.t)}</div></div>`).join("") : "";
+
+  return `
+    <div class="card-head">
+      <div class="eyebrow">${esc(s.title)} &middot; ${eIdx+1} of ${s.items.length}</div>
+      <h2>${esc(ex.name)}${ex.alias ? `<span class="alias">${esc(ex.alias)}</span>` : ""}</h2>
+      <div class="chips">${chipsHTML(ex.chips)}</div>
+    </div>
+    <div class="card-body">
+      <section class="blk"><h3 class="blk-t">Setup</h3><p>${esc(ex.setup)}</p></section>
+      <section class="blk"><h3 class="blk-t">Step by step</h3>${stepsHTML(ex.stepGroups)}</section>
+      <section class="blk"><h3 class="blk-t good">What to feel</h3><div class="callout feel"><p>${esc(ex.feel)}</p></div></section>
+      ${cues ? `<section class="blk"><h3 class="blk-t">Tips and evidence</h3>${cues}</section>` : ""}
+      ${feedback ? `<section class="blk"><h3 class="blk-t amber">Adjust by feel</h3><div class="fb">${feedback}</div></section>` : ""}
+      ${ex.load ? `<section class="blk"><h3 class="blk-t">How to add load</h3><ul class="dots">${ex.load.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></section>` : ""}
+      ${ex.dose ? `<section class="blk"><h3 class="blk-t">Dose across the block</h3>${tableHTML({head:["Phase","Dose"], rows:ex.dose})}</section>` : ""}
+      ${ex.altSteps ? `<section class="blk"><h3 class="blk-t">Alternative</h3>
+          <div class="sub-t">${esc(ex.altTitle)}</div>
+          <ol class="steps">${ex.altSteps.map(x=>`<li>${esc(x)}</li>`).join("")}</ol></section>` : ""}
+      <section class="blk"><h3 class="blk-t warn">Common mistakes</h3>${mistakes}</section>
+      ${ex.evidence ? `<section class="blk"><h3 class="blk-t info">Knee and hip evidence</h3><div class="callout evidence"><p>${esc(ex.evidence)}</p></div></section>` : ""}
+      <div id="timerSlot"></div>
+    </div>`;
+}
+
+function renderInfo(ex, s){
+  const secs = ex.sections.map(sec=>{
+    let inner = "";
+    if(sec.p) inner += sec.p.map(x=>`<p>${esc(x)}</p>`).join("");
+    if(sec.list) inner += `<ul class="dots">${sec.list.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`;
+    if(sec.table) inner += (sec.p ? `<div style="height:10px"></div>` : "") + tableHTML(sec.table, ex === EX["knee-hip"]);
+    if(sec.refs) inner += `<ul class="refs">${sec.refs.map(r=>`
+      <li>${r.u ? `<a href="${esc(r.u)}" target="_blank" rel="noopener noreferrer">${esc(r.l)}</a>` : esc(r.l)}${r.n ? `<span class="note">${esc(r.n)}</span>` : ""}</li>`).join("")}</ul>`;
+    return `<section class="blk"><h3 class="blk-t ${sec.kind||""}">${esc(sec.t)}</h3>${inner}</section>`;
+  }).join("");
+  return `
+    <div class="card-head">
+      <div class="eyebrow">${esc(s.title)} &middot; ${eIdx+1} of ${s.items.length}</div>
+      <h2>${esc(ex.name)}</h2>
+      ${ex.lede ? `<p class="lede">${esc(ex.lede)}</p>` : ""}
+      ${ex.chips ? `<div class="chips" style="margin-top:12px">${chipsHTML(ex.chips)}</div>` : ""}
+    </div>
+    <div class="card-body">${secs}</div>`;
 }
 
 function renderCard(){
   const ex = current(), s = session();
-  const chips = ex.chips.map(c=>`<div class="chip${c.hero?" hero":""}"><span class="k">${esc(c.k)}</span><span class="v">${esc(c.v)}</span></div>`).join("");
-  const cues = (ex.cues||[]).map(c=>`
-    <div class="callout ${c.kind==="rule"?"rule":""}">
-      <h4>${esc(c.t)}</h4><p>${esc(c.b)}</p>
-    </div>`).join("");
-  const mistakes = ex.mistakes.map(m=>`
-    ${m.t ? `<div class="sub-t">${esc(m.t)}</div>` : ""}
-    <ul class="dots bad">${m.items.map(i=>`<li>${esc(i)}</li>`).join("")}</ul>
-  `).join("");
-
-  $("card").innerHTML = `
-    <div class="card-head">
-      <div class="eyebrow">${esc(s.title)} &middot; Exercise ${eIdx+1} of ${s.items.length}</div>
-      <h2>${esc(ex.name)}${ex.alias ? ` <span style="color:var(--muted);font-weight:600;font-size:.72em;display:block;margin-top:4px">${esc(ex.alias)}</span>` : ""}</h2>
-      <div class="chips">${chips}</div>
-    </div>
-    <div class="card-body">
-      <section class="blk">
-        <h3 class="blk-t">Setup</h3>
-        <p>${esc(ex.setup)}</p>
-      </section>
-      <section class="blk">
-        <h3 class="blk-t">Step by step</h3>
-        ${stepsHTML(ex.stepGroups)}
-      </section>
-      <section class="blk">
-        <h3 class="blk-t good">What to feel</h3>
-        <div class="callout feel"><p>${esc(ex.feel)}</p></div>
-      </section>
-      ${cues ? `<section class="blk"><h3 class="blk-t">Key cues</h3>${cues}</section>` : ""}
-      ${ex.altSteps ? `<section class="blk">
-          <h3 class="blk-t">Alternative</h3>
-          <div class="sub-t">${esc(ex.altTitle)}</div>
-          <ol class="steps">${ex.altSteps.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>
-        </section>` : ""}
-      <section class="blk">
-        <h3 class="blk-t warn">Common mistakes</h3>
-        ${mistakes}
-      </section>
-      <div id="timerSlot"></div>
-    </div>`;
-
+  if(isInfo(ex)){
+    haltTimer();
+    if(timerEl.parentNode) timerEl.parentNode.removeChild(timerEl);
+    $("card").innerHTML = renderInfo(ex, s);
+    return;
+  }
+  $("card").innerHTML = renderExercise(ex, s);
   $("timerSlot").appendChild(timerEl);
   configureTimer(ex);
 }
@@ -965,30 +1340,29 @@ function renderChrome(){
   $("nextBtn").disabled = eIdx === n-1;
 
   const ex = current();
-  const q = ex.video || (ex.name + " exercise");
-  $("videoBtn").href = "https://www.youtube.com/results?search_query=" + encodeURIComponent(q + " tutorial");
-  $("videoBtn").setAttribute("aria-label", "Watch video demo of " + ex.name);
-  $("googleBtn").href = "https://www.google.com/search?q=" + encodeURIComponent(ex.name + " exercise video tutorial") + "&tbm=vid";
+  $("videoRow").classList.toggle("hide", isInfo(ex));
+  if(!isInfo(ex)){
+    const q = ex.video || (ex.name + " exercise");
+    $("videoBtn").href = "https://www.youtube.com/results?search_query=" + encodeURIComponent(q);
+    $("videoBtn").setAttribute("aria-label", "Watch video demo of " + ex.name);
+    $("googleBtn").href = "https://www.google.com/search?tbm=vid&q=" + encodeURIComponent(ex.name + " exercise technique");
+  }
 }
 
-function render(){
-  buildTabs();
-  buildJump();
-  renderCard();
-  renderChrome();
+function afterNav(){
   persist();
   $("main").scrollTop = 0;
   if(window.showHeader) window.showHeader();
 }
-
+function render(){
+  buildTabs(); buildJump(); renderCard(); renderChrome(); afterNav();
+}
 function go(delta){
   const n = session().items.length;
   const t = eIdx + delta;
   if(t < 0 || t >= n) return;
   eIdx = t;
-  buildJump(); renderCard(); renderChrome(); persist();
-  $("main").scrollTop = 0;
-  if(window.showHeader) window.showHeader();
+  buildJump(); renderCard(); renderChrome(); afterNav();
 }
 
 /* =========================================================
@@ -999,9 +1373,7 @@ $("prevBtn").addEventListener("click", ()=>go(-1));
 $("nextBtn").addEventListener("click", ()=>go(1));
 $("jump").addEventListener("change", e=>{
   eIdx = parseInt(e.target.value,10) || 0;
-  renderCard(); renderChrome(); persist();
-  $("main").scrollTop = 0;
-  if(window.showHeader) window.showHeader();
+  renderCard(); renderChrome(); afterNav();
 });
 
 document.addEventListener("keydown", e=>{
@@ -1009,11 +1381,15 @@ document.addEventListener("keydown", e=>{
   if(tag === "select" || tag === "input" || tag === "textarea") return;
   if(e.key === "ArrowRight"){ e.preventDefault(); go(1); }
   else if(e.key === "ArrowLeft"){ e.preventDefault(); go(-1); }
-  else if(e.code === "Space"){ e.preventDefault(); T.running ? pauseTimer() : startTimer(); }
-  else if(e.key === "r" || e.key === "R"){ resetTimer(); }
+  else if(e.code === "Space"){
+    if(tag === "button" || tag === "a") return;          // let Space activate the focused control
+    if(!timerEl.isConnected) return;
+    e.preventDefault(); T.running ? pauseTimer() : startTimer();
+  }
+  else if((e.key === "r" || e.key === "R") && timerEl.isConnected){ resetTimer(); }
 });
 
-/* horizontal swipe between exercises (ignores vertical scroll) */
+/* horizontal swipe between cards (ignores vertical scroll) */
 (function(){
   const el = $("main");
   let x0=null, y0=null, lock=null;
@@ -1028,6 +1404,7 @@ document.addEventListener("keydown", e=>{
   }, {passive:true});
   el.addEventListener("touchend", e=>{
     if(x0===null || lock!=="x"){ x0=null; return; }
+    if(e.target.closest && e.target.closest(".tbl-wrap")){ x0=null; return; }
     const dx=e.changedTouches[0].clientX-x0;
     if(Math.abs(dx)>65) go(dx<0?1:-1);
     x0=null; lock=null;
@@ -1035,7 +1412,7 @@ document.addEventListener("keydown", e=>{
 })();
 
 /* =========================================================
-   DYNAMIC HEADER — hides as you scroll into the card,
+   DYNAMIC HEADER: hides as you scroll into the card,
    returns 1:1 as you scroll back up
    ========================================================= */
 (function(){
@@ -1052,7 +1429,6 @@ document.addEventListener("keydown", e=>{
     if(offset > headH) offset = headH;
     apply();
   }
-
   function apply(animate){
     if(animate){
       head.classList.add("settling");
@@ -1062,13 +1438,11 @@ document.addEventListener("keydown", e=>{
     head.style.transform = "translate3d(0,-" + offset + "px,0)";
     head.classList.toggle("raised", main.scrollTop > 4 && offset < headH - 1);
   }
-
   function settle(){
     if(offset <= 0 || offset >= headH) return;
     offset = offset > headH * 0.45 ? headH : 0;
     apply(true);
   }
-
   function onScroll(){
     if(ticking) return;
     ticking = true;
@@ -1078,7 +1452,7 @@ document.addEventListener("keydown", e=>{
       const dy = y - lastY;
       lastY = y;
       const atEnd = (main.scrollHeight - y - main.clientHeight) < 2;
-      if(y <= 0)              offset = 0;                                   // top: always show
+      if(y <= 0)              offset = 0;
       else if(atEnd && dy>0)  { /* iOS rubber-band at the end: ignore */ }
       else                    offset = Math.min(headH, Math.max(0, offset + dy));
       apply(false);
@@ -1086,11 +1460,7 @@ document.addEventListener("keydown", e=>{
       settleTimer = setTimeout(settle, 160);
     });
   }
-
-  window.showHeader = function(){
-    offset = 0; lastY = main.scrollTop;
-    apply(true);
-  };
+  window.showHeader = function(){ offset = 0; lastY = main.scrollTop; apply(true); };
 
   main.addEventListener("scroll", onScroll, {passive:true});
   window.addEventListener("resize", measure);
